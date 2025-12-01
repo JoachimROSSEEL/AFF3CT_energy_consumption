@@ -1,4 +1,4 @@
-# PAC_decoder
+# AFF3CT energy consumption measure for polar codes decoders
 
 
 
