@@ -8,7 +8,6 @@
 #include <aff3ct.hpp>
 #include <filesystem>
 #include <streampu.hpp>
-#include "My_module.hpp"
 #include "LoggerModule.hpp"
 
 #include <fstream>

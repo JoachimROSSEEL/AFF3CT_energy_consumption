@@ -12,7 +12,6 @@
 
 #include <aff3ct.hpp>
 #include <streampu.hpp>
-#include "My_module.hpp"
 #include "LoggerModule.hpp"
 
 
@@ -231,7 +230,7 @@ int main(int argc, char** argv, char** env) {
     // tracker.stop();
     
     tracker.start();
-    int nb_repeat = 10; 
+    int nb_repeat = 2; 
     for (int k = 0; k < nb_repeat; k++)
     {
         for (size_t i = 0; i < monitor_factory.max_frame; i++){

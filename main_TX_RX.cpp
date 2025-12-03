@@ -7,8 +7,6 @@
 
 #include <aff3ct.hpp>
 #include <streampu.hpp>
-#include "MySource_binary.hpp"
-#include "My_module.hpp"
 
 #include <fstream>
 
