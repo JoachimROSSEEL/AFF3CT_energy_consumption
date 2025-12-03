@@ -28,9 +28,9 @@ DEF += -DSPU_TESTS
 # DEF += -DSPU_HWLOC
 
 
-SRC_TX = main_TX.cpp LoggerModule.cpp My_module.cpp 
-SRC_RX = main_RX_energy_test.cpp LoggerModule.cpp My_module.cpp
-SRC_TX_RX = main_TX_RX.cpp LoggerModule.cpp My_module.cpp 
+SRC_TX = main_TX.cpp LoggerModule.cpp 
+SRC_RX = main_RX_energy_test.cpp LoggerModule.cpp 
+SRC_TX_RX = main_TX_RX.cpp LoggerModule.cpp
 
 INC = -I$(AFF3CT)/include \
 	-I$(AFF3CT)/src \
