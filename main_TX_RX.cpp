@@ -1,9 +1,5 @@
-// Generate codewords and write them in a file
-// même graîne: même mot de code 
-// faut même bruit pour test les décodeurs. 
-// Si batch pas trop bruité sur un et un autre bien bruité ça sera pas pareil (notamment déc itératif)
-// faut même condition
-// faudrait bruit ligne commande
+// Main to compute FER and BER of a polar code communication chain. 
+// Modules parameters (such as the CRC, polar code dimensions and the decoder) are passed thanks to AFF3CT factories.
 
 #include <aff3ct.hpp>
 #include <streampu.hpp>

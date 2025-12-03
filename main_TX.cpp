@@ -1,9 +1,6 @@
-// Generate codewords and write them in a file
-// même graîne: même mot de code 
-// faut même bruit pour test les décodeurs. 
-// Si batch pas trop bruité sur un et un autre bien bruité ça sera pas pareil (notamment déc itératif)
-// faut même condition
-// faudrait bruit ligne commande
+// Main to generate a noisy codewords set on the Dalek cluster
+// Modules parameters (such as the CRC and polar code dimensions) are passed thanks to AFF3CT factories.
+
 
 #include <aff3ct.hpp>
 #include <filesystem>
