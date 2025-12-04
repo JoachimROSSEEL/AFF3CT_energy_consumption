@@ -11,8 +11,6 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-cd "/AFF3CT_energy_consumption" || exit
-
 /bin/sh -c './TEST_DALEK'
 
 sleep 1
