@@ -7,10 +7,13 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=joachim.rosseel@bordeaux-inp.fr
 # Output and error files
+#SBATCH --out=/scratch/rosseelj/out/TEST_dalek.out
 #SBATCH --error=/scratch/rosseelj/error/TEST_dalek.err
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-./TEST_DALEK
+cd "~/AFF3CT_energy_consumption" || exit
+
+/bin/sh -c './TEST_DALEK'
 
 sleep 1
