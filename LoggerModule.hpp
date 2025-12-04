@@ -7,7 +7,7 @@
 #include <fstream>
 #include <iomanip>
 
-#include "../aff3ct/lib/streampu/include/Module/Stateful/Stateful.hpp"
+#include "aff3ct/lib/streampu/include/Module/Stateful/Stateful.hpp"
 
 
 namespace spu

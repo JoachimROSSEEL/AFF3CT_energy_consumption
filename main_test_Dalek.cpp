@@ -1,7 +1,7 @@
 // Main to test writing in a Dalek node.
 // It writes number from 0 to 999 in a file.
 
-#include "../aff3ct/include/aff3ct.hpp"
+#include "aff3ct/include/aff3ct.hpp"
 #include <filesystem>
 #include <streampu.hpp>
 #include "LoggerModule.hpp"
