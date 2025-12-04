@@ -1,6 +1,6 @@
 EXEC_TEST = TEST_DALEK
 
-AFF3CT = /home/jrosseel/aff3ct
+AFF3CT = aff3ct
 STREAMPU = $(AFF3CT)/lib/streampu
 
 # AFF3CT IS ASSUMED TO BE STATICALLY COMPILED AND IT INTEGRATES STREAMPU (-DAFF3CT_COMPILE_STATIC_LIB=ON -DAFF3CT_INCLUDE_SPU_LIB=ON)
@@ -37,7 +37,7 @@ INC = -I$(AFF3CT)/include \
 	-I$(STREAMPU)/lib/json/include \
     -I/usr/include 
 
-LIBS = $(AFF3CT)/build/lib/libaff3ct-4.0.0.a
+LIBS = $(AFF3CT)/build/lib/libaff3ct-4.1.0.a
 
 ifeq ($(findstring -DSPU_STACKTRACE, $(DEF)), -DSPU_STACKTRACE)
     $(info Link with cpptrace)
