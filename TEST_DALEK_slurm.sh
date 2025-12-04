@@ -11,6 +11,6 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-/bin/sh -c './TEST_DALEK'
+./TEST_DALEK
 
 sleep 1
