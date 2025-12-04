@@ -15,7 +15,7 @@ int main(int argc, char** argv, char** env) {
 
 
     //std::filesystem::path filepath = "/testes/test";
-    std::string filepath = "./scratch/rosseelj/test";
+    std::string filepath = "/scratch/rosseelj/test";
     std::string filename = "/numbers.txt";
     std::filesystem::create_directories(filepath);
     filename = filepath + filename;
