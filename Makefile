@@ -1,5 +1,7 @@
 EXEC_TEST = TEST_DALEK
+EXEC_TX_RX = TX_RX_energy_test
 EXEC_TX = TX_gen_cw_noisy
+EXEC_RX = RX_energy_test
 
 AFF3CT = aff3ct
 STREAMPU = $(AFF3CT)/lib/streampu
@@ -27,6 +29,9 @@ DEF += -DSPU_TESTS
 
 SRC_TEST = main_test_Dalek.cpp LoggerModule.cpp 
 SRC_TX = main_TX_Dalek.cpp LoggerModule.cpp 
+SRC_RX = main_RX_energy_test.cpp LoggerModule.cpp 
+SRC_TX_RX = main_TX_RX.cpp LoggerModule.cpp
+
 
 INC = -I$(AFF3CT)/include \
 	-I$(AFF3CT)/src \
@@ -79,7 +84,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 $(DEF) $(INC) -O3 -funroll-loops -pg -g -lstdc++fs
 LDFLAGS = $(foreach dir,$(LIB_DIR),-L$(dir)) $(LIBS) $(DEF) -g
 
-all: $(EXEC_TX) $(EXEC_TEST)
+all: $(EXEC_TX) $(EXEC_RX) $(EXEC_TX_RX) $(EXEC_TEST)
 
 $(EXEC_TEST): $(SRC_TEST)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
@@ -93,10 +98,10 @@ $(EXEC_RX): $(SRC_RX)
 $(EXEC_TX_RX): $(SRC_TX_RX)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-valgrind: $(EXEC_TX) $(EXEC_TEST) 
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(EXEC_TEST) ./$(EXEC_TX)
+valgrind: $(EXEC_TX) $(EXEC_RX) $(EXEC_TX_RX) $(EXEC_TEST) 
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(EXEC_TEST) ./$(EXEC_TX) ./$(EXEC_RX) ./$(EXEC_TX_RX)
 
 clean:
-	rm -f $(EXEC_TX) $(EXEC_TEST)
+	rm -f $(EXEC_TX) $(EXEC_RX) $(EXEC_TX_RX) $(EXEC_TEST) 
 
 .PHONY: all clean
