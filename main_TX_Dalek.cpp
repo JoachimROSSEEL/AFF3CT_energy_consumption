@@ -1,7 +1,7 @@
 // Main to generate a noisy codewords set on the Dalek cluster
 // Modules parameters (such as the CRC and polar code dimensions) are passed thanks to AFF3CT factories.
 
-#include <aff3ct.hpp>
+#include "aff3ct/include/aff3ct.hpp"
 #include <filesystem>
 #include <streampu.hpp>
 #include "LoggerModule.hpp"
@@ -106,7 +106,7 @@ int main(int argc, char** argv, char** env) {
 
     // Logger
     //int max_data_size = 100;
-    std::string filepath = "~/scratch/rosseelj/noisy_cw_polar_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type;
+    std::string filepath = "/scratch/rosseelj/noisy_cw_polar_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type;
     std::string filename = "/" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type + "_" 
     + std::to_string(ebn0_min) + "dB.txt";
     std::filesystem::create_directory(filepath);
