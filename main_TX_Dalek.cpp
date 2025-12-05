@@ -144,8 +144,6 @@ int main(int argc, char** argv, char** env) {
 
     //std::ofstream file("graph_tx_gen.dot");
 
-    seq.export_dot(file);
-
     for (auto lt : seq.get_tasks_per_types())
         for (auto t : lt)
         {
