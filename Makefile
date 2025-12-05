@@ -79,7 +79,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 $(DEF) $(INC) -O3 -funroll-loops -pg -g -lstdc++fs
 LDFLAGS = $(foreach dir,$(LIB_DIR),-L$(dir)) $(LIBS) $(DEF) -g
 
-all: $(EXEC_TEST)
+all: $(EXEC_TX) $(EXEC_TEST)
 
 $(EXEC_TEST): $(SRC_TEST)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
