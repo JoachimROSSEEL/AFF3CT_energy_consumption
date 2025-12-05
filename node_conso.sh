@@ -1,3 +1,16 @@
+#!/bin/bash
+#SBATCH --job-name=node_conso
+#SBATCH --export=ALL
+# Walltime
+#SBATCH --time=336:00:00
+# Mail
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=joachim.rosseel@bordeaux-inp.fr
+# Output and error files
+#SBATCH --out=/scratch/rosseelj/out/node_conso.out
+#SBATCH --error=/scratch/rosseelj/error/node_conso.err
+# Declare job non-rerunable
+#SBATCH --no-requeue
 
 sleep 1
 
