@@ -1,4 +1,5 @@
 EXEC_TEST = TEST_DALEK
+EXEC_TX = TX_gen_cw_noisy
 
 AFF3CT = aff3ct
 STREAMPU = $(AFF3CT)/lib/streampu
@@ -25,6 +26,7 @@ DEF += -DSPU_TESTS
 
 
 SRC_TEST = main_test_Dalek.cpp LoggerModule.cpp 
+SRC_TX = main_TX_Dalek.cpp LoggerModule.cpp 
 
 INC = -I$(AFF3CT)/include \
 	-I$(AFF3CT)/src \
@@ -82,16 +84,19 @@ all: $(EXEC_TEST)
 $(EXEC_TEST): $(SRC_TEST)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
+$(EXEC_TX): $(SRC_TX)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
 $(EXEC_RX): $(SRC_RX)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)	
 
 $(EXEC_TX_RX): $(SRC_TX_RX)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-valgrind: $(EXEC_TEST) 
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(EXEC_TEST)
+valgrind: $(EXEC_TX) $(EXEC_TEST) 
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(EXEC_TEST) ./$(EXEC_TX)
 
 clean:
-	rm -f $(EXEC_TEST)
+	rm -f $(EXEC_TX) $(EXEC_TEST)
 
 .PHONY: all clean
