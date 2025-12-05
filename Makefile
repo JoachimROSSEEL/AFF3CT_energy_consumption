@@ -29,8 +29,8 @@ DEF += -DSPU_TESTS
 
 SRC_TEST = main_test_Dalek.cpp LoggerModule.cpp 
 SRC_TX = main_TX_Dalek.cpp LoggerModule.cpp 
-SRC_RX = main_RX_energy_test.cpp LoggerModule.cpp 
-SRC_TX_RX = main_TX_RX.cpp LoggerModule.cpp
+SRC_RX = main_RX_energy_test_Dalek.cpp LoggerModule.cpp 
+SRC_TX_RX = main_TX_RX_Dalek.cpp LoggerModule.cpp
 
 
 INC = -I$(AFF3CT)/include \
