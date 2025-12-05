@@ -63,8 +63,9 @@ echo "Running TX_RX chain with energy test."
 # "{R0,R1,R0L,REP,REPL,SPC}"
 sleep 1
 
+touch /scratch/rosseelj/conso/conso_TX_RX.txt
+
 node-conso -P 1
 node-conso -m 1
 node-conso -M 1 -t 270 > /scratch/rosseelj/conso/conso_TX_RX.txt
-
 exit 0
