@@ -13,6 +13,12 @@
 #SBATCH --no-requeue
 module load node-conso/g8b77353
 
+touch /scratch/rosseelj/conso/conso_TX_RX.txt
+
+node-conso -P 1
+node-conso -m 1
+node-conso -M 1 -t 280 > /scratch/rosseelj/conso/conso_TX_RX.txt
+
 # Polar Code (4096, Rate=1/2)
 echo "Running TX_RX chain with energy test."
 ./TX_RX_energy_test \
@@ -63,9 +69,5 @@ echo "Running TX_RX chain with energy test."
 # "{R0,R1,R0L,REP,REPL,SPC}"
 sleep 1
 
-touch /scratch/rosseelj/conso/conso_TX_RX.txt
 
-node-conso -P 1
-node-conso -m 1
-node-conso -M 1 -t 270 > /scratch/rosseelj/conso/conso_TX_RX.txt
 exit 0
