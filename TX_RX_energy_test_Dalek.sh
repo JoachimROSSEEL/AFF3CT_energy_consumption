@@ -11,13 +11,16 @@
 #SBATCH --error=/scratch/rosseelj/error/TX_RX.err
 # Declare job non-rerunable
 #SBATCH --no-requeue
-# module load node-conso/g8b77353
 
-# touch /scratch/rosseelj/conso/conso_TX_RX.txt
+module load node-conso/g8b77353
 
-# node-conso -P 1
-# node-conso -m 1
-# node-conso -M 1 -t 260 > /scratch/rosseelj/conso/conso_TX_RX.txt
+touch /scratch/rosseelj/conso/conso_TX_RX.txt
+
+node-conso -P 1
+node-conso -m 1
+node-conso -M 1 -t 300 > /scratch/rosseelj/conso/conso_TX_RX.txt &
+
+sleep 1
 
 # Polar Code (4096, Rate=1/2)
 echo "Running TX_RX chain with energy test."
