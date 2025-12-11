@@ -11,12 +11,12 @@
 #SBATCH --error=/scratch/rosseelj/error/RX_energy_test_polar_nodes.err
 # Declare job non-rerunable
 #SBATCH --no-requeue
+mkdir pids -p
+python3 RX_energy_test_polar_nodes.py > pids/RX_energy_test_polar_nodes_pid
 
-python3 RX_energy_test_polar_nodes.py 
-
-# Trick to avoid being kicked by the PBS server due to detached process group of Python script
-# while [ -e /proc/$(cat "pids") ]
-# do
-#   sleep 0.1
-# done
+Trick to avoid being kicked by the PBS server due to detached process group of Python script
+while [ -e /proc/$(cat "pids/RX_energy_test_polar_nodes_pid") ]
+do
+  sleep 0.1
+done
 
