@@ -1,4 +1,4 @@
-import os
+
 import itertools
 import time
 import subprocess
@@ -110,7 +110,10 @@ if __name__ == "__main__":
     # subprocess.Popen([line_com], shell = True)
     proc.stdin.write(line_com.encode())
     proc.stdin.flush() 
-    time.sleep(5)
+    
+    line_com = "sleep 3\n"
+    proc.stdin.write(line_com.encode())
+    proc.stdin.flush()
 
   # line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-simd {simd} --dec-polar-nodes {list_combi[i]}"
   # os.system(line_com) 
