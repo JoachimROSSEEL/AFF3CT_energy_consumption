@@ -69,7 +69,7 @@ proc.stdin.write(line_com.encode())
 proc.stdin.flush()
 
 # Duration of energy measurement (in seconds)
-te = 1000
+te = 450
 
 # Setting writing path for energy consumption
 write_path = "/scratch/rosseelj/energy/" + "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec
