@@ -58,7 +58,7 @@ for L in range(len(polar_nodes) + 1):
 list_combi.remove('{}')
 
 # Load node conso 
-process = subprocess.Popen(["module load node-conso/g8b77353"], shell=True)
+process = subprocess.Popen(["module load /mnt/nfs/software/modules-env/etc/modulefiles/tools/node-conso/g8b77353"], shell=True)
 # subprocess.run(["module", "load", "node-conso/g8b77353"])
 # Duration of energy measurement (in seconds)
 te = 200
