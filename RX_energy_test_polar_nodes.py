@@ -101,7 +101,7 @@ if __name__ == "__main__":
     proc.stdin.write(line_com.encode())
     proc.stdin.flush()
 
-    line_com = "sleep 1\n"
+    line_com = "sleep 3\n"
     proc.stdin.write(line_com.encode())
     proc.stdin.flush()
 
