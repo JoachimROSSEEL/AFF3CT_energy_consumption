@@ -59,6 +59,9 @@ list_combi.remove('{}')
 
 # Load node conso 
 proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+line_com = "source /etc/profile\n"
+proc.stdin.write(line_com.encode())
+proc.stdin.flush()
 line_com = "module load /mnt/nfs/software/modules-env/etc/modulefiles/tools/node-conso/g8b77353\n"
 proc.stdin.write(line_com.encode())
 proc.stdin.flush()
