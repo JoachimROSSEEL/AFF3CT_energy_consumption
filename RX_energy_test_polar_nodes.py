@@ -58,7 +58,7 @@ for L in range(len(polar_nodes) + 1):
 list_combi.remove('{}')
 
 # Source profile for module load
-proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+proc = subprocess.Popen(["/bin/bash"], shell=True)
 line_com = "source /etc/profile\n"
 proc.stdin.write(line_com.encode())
 proc.stdin.flush()
