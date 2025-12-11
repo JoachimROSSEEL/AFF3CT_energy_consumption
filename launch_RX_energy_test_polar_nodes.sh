@@ -12,7 +12,6 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-module load node-conso/g8b77353
 python3 RX_energy_test_polar_nodes.py
 
 # Trick to avoid being kicked by the PBS server due to detached process group of Python script
