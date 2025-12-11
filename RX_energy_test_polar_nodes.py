@@ -1,6 +1,7 @@
 import os
 import itertools
 import time
+import subprocess
 
 # Noise parameters
 # Noise for FER = 1e-2
@@ -57,7 +58,8 @@ for L in range(len(polar_nodes) + 1):
 list_combi.remove('{}')
 
 # Load node conso 
-os.system(f"module load node-conso/g8b77353")
+process = subprocess.Popen(["module load node-conso/g8b77353"], shell=True)
+# subprocess.run(["module", "load", "node-conso/g8b77353"])
 # Duration of energy measurement (in seconds)
 te = 200
 
@@ -69,17 +71,17 @@ line_com = f""
 if __name__ == "__main__":
   for i in range(0, 1):
     # Starting the  board
-    os.system("node-conso -P 1")
+    subprocess.Popen(["node-conso -P 1"], shell=True)
     # Clearing registers 
-    os.system("node-conso -m 1")
+    subprocess.Popen(["node-conso -m 1"], shell=True)
      # Lauching node consommation measurement
     write_file = write_path + "/Decoder_polar" + dec + "_nodes_" + list_combi[i] + ".txt"
-    os.system(f"node-conso -M 1 -t {te} > {write_file} &")
+    subprocess.Popen([f"node-conso -M 1 -t {te} > {write_file} &"], shell=True)
     time.sleep(30)
 
     # Launching RX chain 
-    line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}"
-    os.system(line_com) 
+    line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}"
+    subprocess.Popen([line_com], shell = True) 
     time.sleep(30)
 
   # line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-simd {simd} --dec-polar-nodes {list_combi[i]}"
