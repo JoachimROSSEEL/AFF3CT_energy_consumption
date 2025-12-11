@@ -2,6 +2,8 @@
 #include <filesystem>
 #include <fstream>
 
+#include <chrono>
+#include <ctime>
 
 #include "aff3ct/include/aff3ct.hpp"
 #include <streampu.hpp>
@@ -14,6 +16,7 @@ using namespace aff3ct;
 int main(int argc, char** argv, char** env) {
 
     std::cout << "Start !" << std::endl;
+    auto start = std::chrono::system_clock::now();
     
     // Creating factories for CRC, polar codec, channel and noise level
     factory::CRC CRC_factory;
@@ -221,6 +224,15 @@ int main(int argc, char** argv, char** env) {
     // //std::filesystem::current_path(std::filesystem::temp_directory_path());
     // std::filesystem::create_directory(filepath_energy);
     // std::string filename_energy =  filepath_energy + "/" + dec_full_name + ".csv";
+
+    // Time measurement
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s"
+              << std::endl;
     std::cout << "End !" << std::endl;
     //stats_output_f.close();
 
