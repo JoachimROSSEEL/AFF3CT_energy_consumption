@@ -101,9 +101,7 @@ if __name__ == "__main__":
     proc.stdin.write(line_com.encode())
     proc.stdin.flush()
 
-    line_com = "sleep 3\n"
-    proc.stdin.write(line_com.encode())
-    proc.stdin.flush()
+    time.sleep(5)
 
     # Launching RX chain 
     line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}\n"
@@ -111,9 +109,7 @@ if __name__ == "__main__":
     proc.stdin.write(line_com.encode())
     proc.stdin.flush() 
     
-    line_com = "sleep 3\n"
-    proc.stdin.write(line_com.encode())
-    proc.stdin.flush()
+    time.sleep(5)
 
   # line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-simd {simd} --dec-polar-nodes {list_combi[i]}"
   # os.system(line_com) 
@@ -139,15 +135,3 @@ if __name__ == "__main__":
   # line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-simd {simd} --dec-polar-nodes {list_combi[i]}"
   # os.system(line_com) 
   # time.sleep(30)
-
-
-# export_command = 'export MAVAR="popilop"\n'
-# echo_command = 'echo $MAVAR\n'
-
-# proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-# proc.stdin.write(export_command.encode())
-# proc.stdin.flush()
-# proc.stdin.write(echo_command.encode())
-# proc.stdin.flush()
-# time.sleep(1)
-# print(proc.communicate())
