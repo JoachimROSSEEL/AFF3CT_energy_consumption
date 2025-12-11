@@ -14,7 +14,7 @@
 mkdir pids -p
 python3 RX_energy_test_polar_nodes.py > pids/RX_energy_test_polar_nodes_pid
 
-Trick to avoid being kicked by the PBS server due to detached process group of Python script
+# Trick to avoid being kicked by the PBS server due to detached process group of Python script
 while [ -e /proc/$(cat "pids/RX_energy_test_polar_nodes_pid") ]
 do
   sleep 0.1
