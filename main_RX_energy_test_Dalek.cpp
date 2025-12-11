@@ -13,7 +13,7 @@ using namespace aff3ct;
 
 int main(int argc, char** argv, char** env) {
 
-    //std::cout << "Start !" << std::endl;
+    std::cout << "Start !" << std::endl;
     
     // Creating factories for CRC, polar codec, channel and noise level
     factory::CRC CRC_factory;
@@ -221,7 +221,7 @@ int main(int argc, char** argv, char** env) {
     // //std::filesystem::current_path(std::filesystem::temp_directory_path());
     // std::filesystem::create_directory(filepath_energy);
     // std::string filename_energy =  filepath_energy + "/" + dec_full_name + ".csv";
-    //std::cout << "End !" << std::endl;
+    std::cout << "End !" << std::endl;
     //stats_output_f.close();
 
 }
