@@ -1,4 +1,3 @@
-# Script to launch python script RX_energy_test_polar_nodes.py with SBATCH parameters
 #!/bin/bash
 #SBATCH --job-name=RX_energy_test_polar_nodes
 #SBATCH --export=ALL
