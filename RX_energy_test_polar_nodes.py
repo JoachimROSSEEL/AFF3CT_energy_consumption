@@ -58,8 +58,10 @@ for L in range(len(polar_nodes) + 1):
 list_combi.remove('{}')
 
 # Load node conso 
-process = subprocess.Popen(["module load /mnt/nfs/software/modules-env/etc/modulefiles/tools/node-conso/g8b77353"], shell=True)
-# subprocess.run(["module", "load", "node-conso/g8b77353"])
+proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+line_com = "module load /mnt/nfs/software/modules-env/etc/modulefiles/tools/node-conso/g8b77353\n"
+proc.stdin.write(line_com.encode())
+proc.stdin.flush()
 # Duration of energy measurement (in seconds)
 te = 200
 
@@ -71,17 +73,28 @@ line_com = f""
 if __name__ == "__main__":
   for i in range(0, 1):
     # Starting the  board
-    subprocess.Popen(["node-conso -P 1"], shell=True)
-    # Clearing registers 
-    subprocess.Popen(["node-conso -m 1"], shell=True)
-     # Lauching node consommation measurement
+    line_com = "node-conso -P 1\n"
+    proc.stdin.write(line_com.encode())
+    proc.stdin.flush()
+    # subprocess.Popen(["node-conso -P 1"], shell=True)
+    # Clearing registers
+    line_com = "node-conso -m 1\n"
+    # subprocess.Popen(["node-conso -m 1"], shell=True)
+    proc.stdin.write(line_com.encode())
+    proc.stdin.flush()
+    # Lauching node consommation measurement
     write_file = write_path + "/Decoder_polar" + dec + "_nodes_" + list_combi[i] + ".txt"
-    subprocess.Popen([f"node-conso -M 1 -t {te} > {write_file} &"], shell=True)
+    # subprocess.Popen([f"node-conso -M 1 -t {te} > {write_file} &"], shell=True)
+    line_com = f"node-conso -M 1 -t {te} > {write_file}\n"
+    proc.stdin.write(line_com.encode())
+    proc.stdin.flush()
     time.sleep(30)
 
     # Launching RX chain 
-    line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}"
-    subprocess.Popen([line_com], shell = True) 
+    line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}\n"
+    # subprocess.Popen([line_com], shell = True)
+    proc.stdin.write(line_com.encode())
+    proc.stdin.flush() 
     time.sleep(30)
 
   # line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-simd {simd} --dec-polar-nodes {list_combi[i]}"
@@ -108,3 +121,15 @@ if __name__ == "__main__":
   # line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-simd {simd} --dec-polar-nodes {list_combi[i]}"
   # os.system(line_com) 
   # time.sleep(30)
+
+
+# export_command = 'export MAVAR="popilop"\n'
+# echo_command = 'echo $MAVAR\n'
+
+# proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+# proc.stdin.write(export_command.encode())
+# proc.stdin.flush()
+# proc.stdin.write(echo_command.encode())
+# proc.stdin.flush()
+# time.sleep(1)
+# print(proc.communicate())
