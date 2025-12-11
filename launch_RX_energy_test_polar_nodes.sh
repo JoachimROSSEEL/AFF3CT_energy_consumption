@@ -12,7 +12,7 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-/bin/sh -c '. python3 RX_energy_test_polar_nodes.py'
+python3 RX_energy_test_polar_nodes.py
 
 # Trick to avoid being kicked by the PBS server due to detached process group of Python script
 # while [ -e /proc/$(cat "$HOME/tmp/pids/fer_listexp_parallel_nn_pid") ]
