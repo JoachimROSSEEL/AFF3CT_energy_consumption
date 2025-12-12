@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # Launching RX chain 
     p2 = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, shell=True)
     line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}\n"
-    subprocess.Popen([line_com], shell = True)
+    # subprocess.Popen([line_com], shell = True)
     p2.stdin.write(line_com.encode())
     p2.stdin.flush() 
     p1.wait()
