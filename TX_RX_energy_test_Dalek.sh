@@ -12,12 +12,19 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
+# Source node-conso
+source /etc/profile
+
+# Load node conso
 module load node-conso/g8b77353
 
-
-
+# Starting the  board
 node-conso -P 1
+
+# Clearing registers
 node-conso -m 1
+
+# Lauching node consumption measurement
 node-conso -M 1 -t 300 > /scratch/rosseelj/conso/conso_TX_RX.txt &
 
 sleep 1
@@ -71,4 +78,6 @@ echo "Running TX_RX chain with energy test."
 # SC (FAST or NAIVE) SCAN (NAIVE) SCF --dec-flips 4 (NAIVE) SCL (FAST or NAIVE) SCL_MEM (FAST) ASCL (FAST) ASCL_MEM (FAST) CHASE ML
 # "{R0,R1,R0L,REP,REPL,SPC}"
 
-exit 0
+sleep 3
+
+# exit 0

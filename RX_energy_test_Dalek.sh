@@ -21,6 +21,7 @@ mkdir -p $2
 source /etc/profile
 
 # Load node conso
+module load node-conso/g8b77353
 
 # Starting the  board
 node-conso -P 1
@@ -58,7 +59,7 @@ end= date +%s
 runtime= $end - $start
 echo runtime
 
-# exit 0
+#exit 0
 
 
 
