@@ -86,9 +86,9 @@ te = 450
 write_path = "/scratch/rosseelj/energy/" + "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec
 
 # Create path 
-line_com = f"mkdir -p {write_path}\n"
-proc.stdin.write(line_com.encode())
-proc.stdin.flush()
+# line_com = f"mkdir -p {write_path}\n"
+# proc.stdin.write(line_com.encode())
+# proc.stdin.flush()
 
 # Launching RX chain and energy measurement for each polar node configuration
 line_com = f""
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # Launching RX chain 
     # proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, shell=True)
     # line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-size {crc_size} --crc-info-bits {crc_info_bits} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}\n"
-    line_com = f"sbatch -w az5-a890m-1 --exclusive RX_energy_test_Dalek.sh {te} {write_file} {crc_poly} {crc_size} {crc_info_bits} {enc_info_bits} {N} {enc_fb_noise} {crc_info_bits} {str(n)} {Eb_N0_min} {Eb_N0_max} {step} {dec} {dec_implem} {list_combi[i]}\n"
+    line_com = f"sbatch -w az5-a890m-1 --exclusive RX_energy_test_Dalek.sh {te} {write_path} {write_file} {crc_poly} {crc_size} {crc_info_bits} {enc_info_bits} {N} {enc_fb_noise} {crc_info_bits} {str(n)} {Eb_N0_min} {Eb_N0_max} {step} {dec} {dec_implem} {list_combi[i]}\n"
     print(line_com)
     # subprocess.Popen([line_com], shell = True)
     proc.stdin.write(line_com.encode())
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     # proc.wait()
     # proc.wait()
     
-    time.sleep(15)
+    # time.sleep(15)
 
   # line_com = f"sudo ./RX_energy_test --crc-poly {crc_poly} --crc-info-bits {crc_info_bits} --crc-size {crc_size} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-simd {simd} --dec-polar-nodes {list_combi[i]}"
   # os.system(line_com) 
