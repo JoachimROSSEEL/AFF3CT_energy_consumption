@@ -12,7 +12,7 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-start= date +%s
+start=`date +%s`
 
 # Make folder to store energy measurement
 mkdir -p $2
@@ -55,7 +55,9 @@ echo "Running RX chain with energy test."
 
 sleep 3
 
-end= date +%s
+wait
+
+end=`date +%s`
 runtime= $((end - start))
 echo "runtime is $runtime s."
 
