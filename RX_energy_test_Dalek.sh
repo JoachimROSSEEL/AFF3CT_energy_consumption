@@ -17,7 +17,10 @@ node-conso -m 1
 node-conso -M 1 -t $1 > $2 &
 
 sleep 1
-
+echo $1
+echo $7
+echo $11
+echo $14
 echo "Running RX chain with energy test."
 ./RX_energy_test \
 --crc-poly $3 \
