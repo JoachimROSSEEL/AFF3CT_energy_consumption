@@ -53,12 +53,10 @@ echo "Running RX chain with energy test."
 # SC (FAST or NAIVE) SCAN (NAIVE) SCF --dec-flips 4 (NAIVE) SCL (FAST or NAIVE) SCL_MEM (FAST) ASCL (FAST) ASCL_MEM (FAST) CHASE ML
 # "{R0,R1,R0L,REP,REPL,SPC}"
 
-sleep 3
-
 wait
 
 end=`date +%s`
-runtime= $((end - start))
+runtime=$((end-start))
 echo "runtime is $runtime s."
 
 #exit 0
