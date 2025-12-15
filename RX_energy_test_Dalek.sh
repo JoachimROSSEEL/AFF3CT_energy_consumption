@@ -57,7 +57,7 @@ sleep 3
 
 end= date +%s
 runtime= $end - $start
-echo runtime
+echo "runtime is $runtime s."
 
 #exit 0
 
