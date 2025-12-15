@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # subprocess.Popen([line_com], shell = True)
     proc.stdin.write(line_com.encode())
     proc.stdin.flush() 
-    proc.wait()
+    # proc.wait()
     # proc.wait()
     
     time.sleep(15)
