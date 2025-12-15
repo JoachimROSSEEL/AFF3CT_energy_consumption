@@ -56,7 +56,7 @@ echo "Running RX chain with energy test."
 sleep 3
 
 end= date +%s
-runtime= $end - $start
+runtime= $((end - start))
 echo "runtime is $runtime s."
 
 #exit 0
