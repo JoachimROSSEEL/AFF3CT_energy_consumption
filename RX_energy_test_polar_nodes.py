@@ -66,7 +66,7 @@ for L in range(len(polar_nodes) + 1):
 list_combi.remove('{}')
 
 # Duration of energy measurement (in seconds)
-te = 460
+te = 600
 
 # Setting writing path for energy consumption
 write_path = "/scratch/rosseelj/energy/" + "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec
