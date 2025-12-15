@@ -74,7 +74,7 @@ write_path = "/scratch/rosseelj/energy/" + "energy_polar_" + str(N) + "_" + str(
 # Launching RX chain and energy measurement for each polar node configuration
 line_com = f""
 if __name__ == "__main__":
-  for i in range(0, 3):
+  for i in range(0, len(list_combi)):
 
     # File to write energy consumption
     write_file = write_path + "/Decoder_polar_" + dec + "_nodes_" + list_combi[i] + ".txt"
