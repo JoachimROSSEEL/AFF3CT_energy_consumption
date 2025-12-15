@@ -12,28 +12,26 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-# SNR for FER = 10-2: 
-# SC(4096,2048) : 2.15 dB
-# SCL-4(4096,2048) : 1.525 dB
-# SC(4096,1024) : 2.25 dB
-# SCL-4(4096,1024) : 1.56 dB
-# SC(4096,3072) : 3.0 dB
-# SCL-4(4096,3072) : 3.8 dB
+node-conso -P 1
+node-conso -m 1
+node-conso -M 1 -t $1 > $2 &
+
+sleep 1
 
 echo "Running RX chain with energy test."
 ./RX_energy_test \
---crc-poly "0x8005" \
---crc-size 16 \
---crc-info-bits 2032 \
---enc-info-bits 2048 \
--N 4096 \
---enc-fb-noise 0.85 \
--m 2.15 \
--M 2.65 \
--s 0.5 \
---mnt-info-bits 2032 \
--n 100000 \
--D SC --dec-implem FAST 
+--crc-poly $3 \
+--crc-size $4 \
+--crc-info-bits $5 \
+--enc-info-bits $6 \
+-N $7 \
+--enc-fb-noise $8 \
+--mnt-info-bits $9 \
+-n $10 \
+-m $11 \
+-M $12 \
+-s $13 \
+-D $14 --dec-implem $15 --dec-polar-nodes $16
 # --dec-simd "INTRA" --dec-polar-nodes "{R0,R1,REP}"  \
 # SC (FAST or NAIVE) SCAN (NAIVE) SCF --dec-flips 4 (NAIVE) SCL (FAST or NAIVE) SCL_MEM (FAST) ASCL (FAST) ASCL_MEM (FAST) CHASE ML
 # "{R0,R1,R0L,REP,REPL,SPC}"
