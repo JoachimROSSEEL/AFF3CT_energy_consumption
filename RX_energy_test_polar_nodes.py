@@ -122,7 +122,7 @@ if __name__ == "__main__":
     # Launching RX chain 
     # proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, shell=True)
     # line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-size {crc_size} --crc-info-bits {crc_info_bits} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}\n"
-    line_com = f"sbatch -w az5-a890m-1 --exclusive RX_energy_test_Dalek.sh {te} {write_file} {crc_poly} {crc_size} {crc_info_bits} {enc_info_bits} {N} {enc_fb_noise} {crc_info_bits} {n} {Eb_N0_min} {Eb_N0_max} {step} {dec} {dec_implem} {list_combi[i]}\n"
+    line_com = f"sbatch -w az5-a890m-1 --exclusive RX_energy_test_Dalek.sh {te} {write_file} {crc_poly} {crc_size} {crc_info_bits} {enc_info_bits} {N} {enc_fb_noise} {crc_info_bits} {str(n)} {Eb_N0_min} {Eb_N0_max} {step} {dec} {dec_implem} {list_combi[i]}\n"
     # subprocess.Popen([line_com], shell = True)
     proc.stdin.write(line_com.encode())
     proc.stdin.flush() 
