@@ -12,14 +12,26 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
+# Make folder to store energy measurement
 mkdir -p $2
 
+# Source node-conso
+source /etc/profile
+
+# Load node conso
+
+# Starting the  board
 node-conso -P 1
+
+# Clearing registers
 node-conso -m 1
+
+# Lauching node consumption measurement
 node-conso -M 1 -t $1 > $3 &
 
 sleep 1
 
+# Launching RX cgain
 echo "Running RX chain with energy test."
 ./RX_energy_test \
 --crc-poly $4 \
