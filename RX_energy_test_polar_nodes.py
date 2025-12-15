@@ -1,7 +1,6 @@
 
 import itertools
 import time
-import subprocess
 import os
 
 # Noise parameters
@@ -66,70 +65,26 @@ for L in range(len(polar_nodes) + 1):
         list_combi.append("{" + str_sub + "}")
 list_combi.remove('{}')
 
-# Creating bash
-# proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, shell=True)
-
-# # Source profile
-# line_com = "source /etc/profile\n"
-# proc.stdin.write(line_com.encode())
-# proc.stdin.flush()
-
-# # Load node conso 
-# line_com = "module load /mnt/nfs/software/modules-env/etc/modulefiles/tools/node-conso/g8b77353\n"
-# proc.stdin.write(line_com.encode())
-# proc.stdin.flush()
-
 # Duration of energy measurement (in seconds)
 te = 500
 
 # Setting writing path for energy consumption
 write_path = "/scratch/rosseelj/energy/" + "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec
 
-# Create path 
-# line_com = f"mkdir -p {write_path}\n"
-# proc.stdin.write(line_com.encode())
-# proc.stdin.flush()
-
 # Launching RX chain and energy measurement for each polar node configuration
 line_com = f""
 if __name__ == "__main__":
   for i in range(0, 1):
-    # Process for node-conso 
-    # p1 = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, shell=True)
-    # # Loading node-conso 
-    # line_com = "source /etc/profile\n"
-    # p1.stdin.write(line_com.encode())
-    # p1.stdin.flush()
 
-    # # Starting the  board
-    # line_com = "node-conso -P 1\n"
-    # proc.stdin.write(line_com.encode())
-    # proc.stdin.flush()
-
-    # # Clearing registers
-    # line_com = "node-conso -m 1\n"
-    # proc.stdin.write(line_com.encode())
-    # proc.stdin.flush()
-
-    # # Lauching node consommation measurement
+    # File to write energy consumption
     write_file = write_path + "/Decoder_polar_" + dec + "_nodes_" + list_combi[i] + ".txt"
-    # line_com = f"node-conso -M 1 -t {te} > {write_file} \n"
-    # proc.stdin.write(line_com.encode())
-    # proc.stdin.flush()
-
-    # time.sleep(5)
 
     # Launching RX chain 
-    # proc = subprocess.Popen(["/bin/bash"], stdin=subprocess.PIPE, shell=True)
     # line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-size {crc_size} --crc-info-bits {crc_info_bits} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}\n"
     line_com = f"sbatch -w az5-a890m-1 --exclusive RX_energy_test_Dalek.sh {te} {write_path} {write_file} {crc_poly} {crc_size} {crc_info_bits} {enc_info_bits} {N} {enc_fb_noise} {crc_info_bits} {str(n)} {Eb_N0_min} {Eb_N0_max} {step} {dec} {dec_implem} {list_combi[i]}\n"
     print(line_com)
     os.system(line_com)
-    # subprocess.Popen([line_com], shell = True)
-    # proc.stdin.write(line_com.encode())
-    # proc.stdin.flush() 
-    # proc.wait()
-    # proc.wait()
+
     
     # time.sleep(15)
 

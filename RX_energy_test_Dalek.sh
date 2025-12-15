@@ -12,6 +12,8 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
+start=`date +%s`
+
 # Make folder to store energy measurement
 mkdir -p $2
 
@@ -49,6 +51,11 @@ echo "Running RX chain with energy test."
 # --dec-simd "INTRA" --dec-polar-nodes "{R0,R1,REP}"  \
 # SC (FAST or NAIVE) SCAN (NAIVE) SCF --dec-flips 4 (NAIVE) SCL (FAST or NAIVE) SCL_MEM (FAST) ASCL (FAST) ASCL_MEM (FAST) CHASE ML
 # "{R0,R1,R0L,REP,REPL,SPC}"
+
+sleep 3
+
+end=`date +%s`
+runtime=$(echo "$end - $start")
 
 exit 0
 
