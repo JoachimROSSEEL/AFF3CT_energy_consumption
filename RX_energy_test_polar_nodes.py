@@ -66,7 +66,7 @@ for L in range(len(polar_nodes) + 1):
 list_combi.remove('{}')
 
 # Duration of energy measurement (in seconds)
-te = 500
+te = 460
 
 # Setting writing path for energy consumption
 write_path = "/scratch/rosseelj/energy/" + "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec
@@ -74,7 +74,7 @@ write_path = "/scratch/rosseelj/energy/" + "energy_polar_" + str(N) + "_" + str(
 # Launching RX chain and energy measurement for each polar node configuration
 line_com = f""
 if __name__ == "__main__":
-  for i in range(0, 1):
+  for i in range(0, 3):
 
     # File to write energy consumption
     write_file = write_path + "/Decoder_polar_" + dec + "_nodes_" + list_combi[i] + ".txt"
