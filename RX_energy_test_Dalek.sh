@@ -26,13 +26,13 @@ echo $6
 echo $7
 echo $8
 echo $9
-echo $10
-echo $11
-echo $12
-echo $13
-echo $14
-echo $15
-echo $16
+echo ${10}
+echo ${11}
+echo ${12}
+echo ${13}
+echo ${14}
+echo ${15}
+echo ${16}
 echo "Running RX chain with energy test."
 ./RX_energy_test \
 --crc-poly $3 \
@@ -42,11 +42,11 @@ echo "Running RX chain with energy test."
 -N $7 \
 --enc-fb-noise $8 \
 --mnt-info-bits $9 \
--n $10 \
--m $11 \
--M $12 \
--s $13 \
--D $14 --dec-implem $15 --dec-polar-nodes $16
+-n ${10} \
+-m ${11} \
+-M ${12} \
+-s ${13} \
+-D ${14} --dec-implem ${15} --dec-polar-nodes ${16}
 # --dec-simd "INTRA" --dec-polar-nodes "{R0,R1,REP}"  \
 # SC (FAST or NAIVE) SCAN (NAIVE) SCF --dec-flips 4 (NAIVE) SCL (FAST or NAIVE) SCL_MEM (FAST) ASCL (FAST) ASCL_MEM (FAST) CHASE ML
 # "{R0,R1,R0L,REP,REPL,SPC}"
