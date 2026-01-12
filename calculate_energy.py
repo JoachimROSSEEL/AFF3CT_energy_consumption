@@ -75,6 +75,9 @@ file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Energy(J)":<30}  {"Ti
 energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
+# Counter to skipping first lines of energy files (time to initialized consummed energy to 0 on cluster)
+skip = 0
+nb_skips = 50 # μs 
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
 # Consumed energy at the start of polar decoding simulation
@@ -97,34 +100,28 @@ for fname in energy_files:
     print(node_config)
     f = open(energy_folder + "/" + fname, "r")
     for line in f:
-        line_split = line.split(" ")
-        # Remove empty blank
-        while '' in line_split:
-            line_split.remove('')
-        # print(line_split)
-        # If not empty line (possible at end of file), compute energy and time
-        if line_split[0] != '\n':
-            # Detect start of decoding simulation: current above 0.4A
-            if float(line_split[-2][0:-2]) > 0.4 and energy_beg == 0:
-                # print(line_split[-2][0:-2])
-                # print(line_split[-1][0:-2])
-                energy_beg = str(line_split[-1][0:-2])
-                ex_time_beg = str(line_split[0])
-                print(energy_beg)
-                print(ex_time_beg)
+        if skip < nb_skips : 
+            skip += 1
+        else : 
+            line_split = line.split(" ")
+            # Remove empty blank
+            while '' in line_split:
+                line_split.remove('')
+            # If not empty line (possible at end of file), compute energy and time
+            if line_split[0] != '\n':
+                # Detect start of decoding simulation: current above 0.4A
+                if float(line_split[-2][0:-2]) > 0.4 and energy_beg == 0:
+                    energy_beg = str(line_split[-1][0:-2])
+                    ex_time_beg = str(line_split[0])
             
-            # End of simulation: current return under 0.4A 
-            if float(line_split[-2][0:-2]) < 0.4 and energy_beg != 0 and energy_end == 0:
-                # print(line_split[-2][0:-2])
-                # print(line_split[-1][0:-2])
-                energy_end = str(line_split[-1][0:-2])
-                ex_time_end = str(line_split[0])
-                print(energy_end)
-                print(ex_time_end)
+                # End of simulation: current return under 0.4A 
+                if float(line_split[-2][0:-2]) < 0.4 and energy_beg != 0 and energy_end == 0:
+                    energy_end = str(line_split[-1][0:-2])
+                    ex_time_end = str(line_split[0])
 
-    energy = float(energy_end) - float(energy_beg)
-    ex_time = float(ex_time_end) - float(ex_time_beg)
-    file_conso_per_nodes.write(f'{node_config:<30} {str(energy):<30} {str(ex_time):<30} \n')
+        energy = float(energy_end) - float(energy_beg)
+        ex_time = float(ex_time_end) - float(ex_time_beg)
+        file_conso_per_nodes.write(f'{node_config:<30} {str(energy):<30} {str(ex_time):<30} \n')
     
     
     # Ressetting to zeros variables
