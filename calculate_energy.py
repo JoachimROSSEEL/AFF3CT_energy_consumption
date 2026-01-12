@@ -126,6 +126,7 @@ for fname in energy_files:
                     file_conso_per_nodes.write(f'{node_config:<30} {str(energy):<30} {str(ex_time):<30} \n')
     
     # Ressetting to zeros variables
+    skip = 0
     energy_beg = 0 
     energy_end = 0
     energy = energy_end - energy_beg
