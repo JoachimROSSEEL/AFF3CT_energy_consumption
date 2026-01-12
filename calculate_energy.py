@@ -78,7 +78,7 @@ energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder,
 
 # Counter to skipping first lines of energy files (time to initialized consummed energy to 0 on cluster)
 skip = 0
-nb_skips = 100 # μs 
+nb_skips = 1000 # 1000μs 
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
 # Consumed energy at the start of polar decoding simulation
