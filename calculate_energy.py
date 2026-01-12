@@ -73,11 +73,12 @@ file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Energy(J)":<30}  {"Ti
 
 # Getting energy file of each polar nodes configuration
 energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
+# energy_folder = "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
 # Counter to skipping first lines of energy files (time to initialized consummed energy to 0 on cluster)
 skip = 0
-nb_skips = 50 # μs 
+nb_skips = 100 # μs 
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
 # Consumed energy at the start of polar decoding simulation
@@ -110,7 +111,7 @@ for fname in energy_files:
             # If not empty line (possible at end of file), compute energy and time
             if line_split[0] != '\n':
                 # Detect start of decoding simulation: current above 0.4A
-                if float(line_split[-2][0:-2]) > 0.4 and energy_beg == 0:
+                if float(line_split[-2][0:-2]) > 0.6 and energy_beg == 0:
                     energy_beg = str(line_split[-1][0:-2])
                     ex_time_beg = str(line_split[0])
             
@@ -119,10 +120,10 @@ for fname in energy_files:
                     energy_end = str(line_split[-1][0:-2])
                     ex_time_end = str(line_split[0])
 
-        energy = float(energy_end) - float(energy_beg)
-        ex_time = float(ex_time_end) - float(ex_time_beg)
-        file_conso_per_nodes.write(f'{node_config:<30} {str(energy):<30} {str(ex_time):<30} \n')
-    
+                    # Computing energy and execution time
+                    energy = float(energy_end) - float(energy_beg)
+                    ex_time = float(ex_time_end) - float(ex_time_beg)
+                    file_conso_per_nodes.write(f'{node_config:<30} {str(energy):<30} {str(ex_time):<30} \n')
     
     # Ressetting to zeros variables
     energy_beg = 0 
@@ -134,3 +135,4 @@ for fname in energy_files:
     f.close()
 
 file_conso_per_nodes.close()
+
