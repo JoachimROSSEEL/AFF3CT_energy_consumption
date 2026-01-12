@@ -76,9 +76,9 @@ energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(en
 # energy_folder = "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
-# Counter to skipping first lines of energy files (time to initialized consummed energy to 0 on cluster)
+# Counter to skipping first lines of energy files (time to initialized consummed energy to 0 on cluster + waiting time for simulation to launch)
 skip = 0
-nb_skips = 1000 # 1000μs 
+nb_skips = 1050 # 1050μs 
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
 # Consumed energy at the start of polar decoding simulation
@@ -93,6 +93,8 @@ ex_time_beg = 0
 ex_time_end = 0
 # Duration of polar decoding simulation
 ex_time = 0
+# Energy treshold : if below, no simulation is running
+e_thresh = 0.6
 
 for fname in energy_files:
     print(fname)
@@ -111,12 +113,12 @@ for fname in energy_files:
             # If not empty line (possible at end of file), compute energy and time
             if line_split[0] != '\n':
                 # Detect start of decoding simulation: current above 0.4A
-                if float(line_split[-2][0:-2]) > 0.6 and energy_beg == 0:
+                if float(line_split[-2][0:-2]) > e_thresh and energy_beg == 0:
                     energy_beg = str(line_split[-1][0:-2])
                     ex_time_beg = str(line_split[0])
             
                 # End of simulation: current return under 0.4A 
-                if float(line_split[-2][0:-2]) < 0.6 and energy_beg != 0 and energy_end == 0:
+                if float(line_split[-2][0:-2]) < e_thresh and energy_beg != 0 and energy_end == 0:
                     energy_end = str(line_split[-1][0:-2])
                     ex_time_end = str(line_split[0])
 
