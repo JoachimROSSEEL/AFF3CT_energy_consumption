@@ -1,22 +1,17 @@
 # Python script to calculate consummed energy on the Dalek cluster from files return by node-conso
 
-# Codes parameters
-
-import itertools
-import csv
-import time
-import os
 from os import listdir
 from os.path import isfile, join
 
+# Polar codes encoder and decoder parameters
 # Noise parameters
 # SNR for FER = 10-2: 
 # SC(4096,2048) : 2.15 dB
 # SCL-4(4096,2048) : 1.525 dB
 # SC(4096,1024) : 2.25 dB
 # SCL-4(4096,1024) : 1.56 dB
-# SC(4096,3072) : 3.0 dB
-# SCL-4(4096,3072) : 3.8 dB
+# SC(4096,3072) : 3.8 dB
+# SCL-4(4096,3072) : 3.0 dB
 
 # Noise for FER = 1e-2
 Eb_N0_min = 2.15
@@ -24,9 +19,6 @@ Eb_N0_min = 2.15
 # 2.15 (SC(4096, R=1/2)) # 6.2
 step = 0.5 
 Eb_N0_max = Eb_N0_min + step
-
-# Number of noisy codewords
-n = 100000 - 1
 
 # CRC
 # crc_poly = "0x8005" 
@@ -63,6 +55,10 @@ dec_implem = "FAST"
 simd = "INTER"
 # --sim-inter-fra, -F
 
+# Number of noisy codewords
+n = 100000 - 1
+
+# Number of times the noisy codewords data set is decoded
 nb_repeats = 10
 
 # File for storing the consummed energy and execution time per polar nodes configuaration
@@ -93,8 +89,11 @@ ex_time_beg = 0
 ex_time_end = 0
 # Duration of polar decoding simulation
 ex_time = 0
-# Energy treshold : if below, no simulation is running
-e_thresh = 0.6
+# Low energy treshold : if below, no simulation is running
+e_thresh_low = 0.2
+# High energy treshold : if superior, a simulation is running
+e_thresh_high = 0.6 
+# e_thresh_low different from e_thresh_high to ensure fluctuations don't impact detection (Sometimes, peak of current)
 
 for fname in energy_files:
     print(fname)
@@ -112,18 +111,23 @@ for fname in energy_files:
                 line_split.remove('')
             # If not empty line (possible at end of file), compute energy and time
             if line_split[0] != '\n':
-                # Detect start of decoding simulation: current above 0.4A
-                if float(line_split[-2][0:-2]) > e_thresh and energy_beg == 0:
+                # Detect start of decoding simulation: current above 0.6A
+                if float(line_split[-2][0:-2]) > e_thresh_high and energy_beg == 0:
                     energy_beg = str(line_split[-1][0:-2])
                     ex_time_beg = str(line_split[0])
             
-                # End of simulation: current return under 0.4A 
-                if float(line_split[-2][0:-2]) < 0.2 and energy_beg != 0 and energy_end == 0:
+                # End of simulation: current return under 0.2A 
+                if float(line_split[-2][0:-2]) < e_thresh_low and energy_beg != 0 and energy_end == 0:
                     energy_end = str(line_split[-1][0:-2])
                     ex_time_end = str(line_split[0])
 
-                    # Computing energy and execution time
+                    # Computing energy 
                     energy = float(energy_end) - float(energy_beg)
+
+                    # Computing energy per bit =  energy / (enc_info_bits * n * nb_repeats)
+                    energy = energy / (enc_info_bits * n * nb_repeats)
+
+                    # Computing execution time
                     ex_time = float(ex_time_end) - float(ex_time_beg)
                     file_conso_per_nodes.write(f'{node_config:<30} {str(energy):<30} {str(ex_time):<30} \n')
     
