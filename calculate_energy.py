@@ -65,7 +65,7 @@ nb_repeats = 10
 name_file_conso_per_nodes = "energy/energy_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_" + dec + "_" + dec_implem + ".txt" 
 # fields_name = ["Nodes_configuration", "Energy(J)", "Time(μs)"]
 file_conso_per_nodes = open(name_file_conso_per_nodes, "w+")
-file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Energy(J)":<30}  {"Time(μs)":<30} \n')
+file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Energy(J/bit)":<30}  {"Time(μs)":<30} \n')
 
 # Getting energy file of each polar nodes configuration
 energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
