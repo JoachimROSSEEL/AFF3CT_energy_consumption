@@ -116,7 +116,7 @@ for fname in energy_files:
                     ex_time_beg = str(line_split[0])
             
                 # End of simulation: current return under 0.4A 
-                if float(line_split[-2][0:-2]) < 0.4 and energy_beg != 0 and energy_end == 0:
+                if float(line_split[-2][0:-2]) < 0.6 and energy_beg != 0 and energy_end == 0:
                     energy_end = str(line_split[-1][0:-2])
                     ex_time_end = str(line_split[0])
 
