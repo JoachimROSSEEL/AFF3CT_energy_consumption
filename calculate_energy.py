@@ -125,6 +125,15 @@ for fname in energy_files:
     energy = float(energy_end) - float(energy_beg)
     ex_time = float(ex_time_end) - float(ex_time_beg)
     file_conso_per_nodes.write(f'{node_config:<30} {str(energy):<30} {str(ex_time):<30} \n')
+    
+    
+    # Ressetting to zeros variables
+    energy_beg = 0 
+    energy_end = 0
+    energy = energy_end - energy_beg
+    ex_time_beg = 0
+    ex_time_end = 0
+    ex_time = 0
     f.close()
 
 file_conso_per_nodes.close()
