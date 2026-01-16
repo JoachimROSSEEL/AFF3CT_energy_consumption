@@ -14,7 +14,7 @@
 
 sleep 1
 
-module load node-conso/g8b77353
+module load ncm/g8b77353
 
 touch /scratch/rosseelj/conso/conso_TX_RX.txt
 

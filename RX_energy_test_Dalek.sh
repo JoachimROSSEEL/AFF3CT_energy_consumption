@@ -21,7 +21,7 @@ mkdir -p $2
 source /etc/profile
 
 # Load node conso
-module load node-conso/g8b77353
+module load ncm/g8b77353
 
 # Starting the  board
 node-conso -P 1
