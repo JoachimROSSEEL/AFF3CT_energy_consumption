@@ -14,10 +14,10 @@
 
 sleep 1
 
-module load ncm/g8b77353
+module load ncm/gdcc873f
 
 touch /scratch/rosseelj/conso/conso_TX_RX.txt
 
 node-conso -P 1
 node-conso -m 1
-node-conso -M 1 -t 300 > /scratch/rosseelj/conso/conso_TX_RX.txt
+node-conso -M 1 -t 60 > /scratch/rosseelj/conso/conso_TX_RX.txt
