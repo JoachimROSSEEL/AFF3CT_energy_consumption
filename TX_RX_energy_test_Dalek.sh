@@ -31,18 +31,7 @@ sleep 1
 
 # Polar Code (4096, Rate=1/2)
 echo "Running TX_RX chain with energy measure."
-taskset -c 0 
-./TX_RX_energy_test \
---crc-poly "0x8005" \
---crc-size 16 \
---crc-info-bits 2032 \
---enc-info-bits 2048 \
--N 4096 \
---enc-fb-noise 0.85 \
--m -4.0 \
--M 3.5 \
--s 0.25 \
--D SC --dec-implem FAST 
+taskset -c 0 ./TX_RX_energy_test --crc-poly "0x8005" --crc-size 16 --crc-info-bits 2032 --enc-info-bits 2048 -N 4096 --enc-fb-noise 0.85 -m -4.0 -M 3.5 -s 0.25 -D SC --dec-implem FAST 
 # --dec-polar-nodes "{R0,R1,R0L,REP}"
 # SC (FAST or NAIVE) SCAN (NAIVE) SCF --dec-flips 4 (NAIVE) SCL (FAST or NAIVE) SCL_MEM (FAST) ASCL (FAST) ASCL_MEM (FAST) CHASE ML
 # "{R0,R1,R0L,REP,REPL,SPC}"
