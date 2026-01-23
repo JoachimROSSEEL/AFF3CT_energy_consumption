@@ -16,7 +16,7 @@
 source /etc/profile
 
 # Load node conso
-module load ncm/g8b77353
+module load ncm/gdcc873f
 
 # Starting the  board
 node-conso -P 1
@@ -30,7 +30,8 @@ node-conso -M 1 -t 300 > /scratch/rosseelj/conso/conso_TX_RX.txt &
 sleep 1
 
 # Polar Code (4096, Rate=1/2)
-echo "Running TX_RX chain with energy test."
+echo "Running TX_RX chain with energy measure."
+taskset -c 0 
 ./TX_RX_energy_test \
 --crc-poly "0x8005" \
 --crc-size 16 \
