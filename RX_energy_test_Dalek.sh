@@ -21,7 +21,7 @@ mkdir -p $2
 source /etc/profile
 
 # Load node conso
-module load ncm/g8b77353
+module load ncm/gdcc873f
 
 # Starting the  board
 node-conso -P 1
@@ -36,19 +36,7 @@ sleep 1
 
 # Launching RX cgain
 echo "Running RX chain with energy test."
-./RX_energy_test \
---crc-poly $4 \
---crc-size $5 \
---crc-info-bits $6 \
---enc-info-bits $7 \
--N $8 \
---enc-fb-noise $9 \
---mnt-info-bits ${10} \
--n ${11} \
--m ${12} \
--M ${13} \
--s ${14} \
--D ${15} --dec-implem ${16} --dec-polar-nodes ${17}
+taskset -c 0 ./RX_energy_test --crc-poly $4 --crc-size $5 --crc-info-bits $6 --enc-info-bits $7 -N $8 --enc-fb-noise $9 --mnt-info-bits ${10} -n ${11} -m ${12} -M ${13} -s ${14} -D ${15} --dec-implem ${16} --dec-polar-nodes ${17}
 # --dec-simd "INTRA" --dec-polar-nodes "{R0,R1,REP}"  \
 # SC (FAST or NAIVE) SCAN (NAIVE) SCF --dec-flips 4 (NAIVE) SCL (FAST or NAIVE) SCL_MEM (FAST) ASCL (FAST) ASCL_MEM (FAST) CHASE ML
 # "{R0,R1,R0L,REP,REPL,SPC}"
