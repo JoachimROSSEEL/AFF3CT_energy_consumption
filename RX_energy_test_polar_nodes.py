@@ -11,8 +11,8 @@ import os
 # SCL-4(4096,1024) : 1.56 dB
 # SC(4096,3072) : 3.0 dB
 # SCL-4(4096,3072) : 3.8 dB
-# SC(32760,16384) : 1.525 dB
-# SC(32760,16384) : 2.2 dB
+# SC(32768,16384) : 1.525 dB
+# SC(32768,8192) : 2.2 dB
 
 # Noise for FER = 1e-2
 Eb_N0_min = 2.15
@@ -63,7 +63,7 @@ for L in range(len(polar_nodes) + 1):
     for subset in itertools.combinations(polar_nodes, L):
         str_sub = ','.join(subset)
         list_combi.append("{" + str_sub + "}")
-list_combi.remove('{}')
+# list_combi.remove('{}')
 
 # Duration of energy measurement (in seconds)
 te = 600
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
     # Launching RX chain 
     # line_com = f"./RX_energy_test --crc-poly {crc_poly} --crc-size {crc_size} --crc-info-bits {crc_info_bits} --enc-info-bits {enc_info_bits} -N {N} --enc-fb-noise {enc_fb_noise} --mnt-info-bits {crc_info_bits} -n {n} -m {Eb_N0_min} -M {Eb_N0_max} -s {step} -D {dec} --dec-implem {dec_implem} --dec-polar-nodes {list_combi[i]}\n"
-    line_com = f"sbatch -w az5-a890m-1 --exclusive RX_energy_test_Dalek.sh {te} {write_path} {write_file} {crc_poly} {crc_size} {crc_info_bits} {enc_info_bits} {N} {enc_fb_noise} {crc_info_bits} {str(n)} {Eb_N0_min} {Eb_N0_max} {step} {dec} {dec_implem} {list_combi[i]}\n"
+    line_com = f"sbatch -w az4-n4090-1 --exclusive RX_energy_test_Dalek.sh {te} {write_path} {write_file} {crc_poly} {crc_size} {crc_info_bits} {enc_info_bits} {N} {enc_fb_noise} {crc_info_bits} {str(n)} {Eb_N0_min} {Eb_N0_max} {step} {dec} {dec_implem} {list_combi[i]}\n"
     print(line_com)
     os.system(line_com)
 
