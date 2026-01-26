@@ -115,32 +115,35 @@ for fname in energy_files:
             # Remove empty blank
             while '' in line_split:
                 line_split.remove('')
-            # node-conso : take intensity and voltage to compute power of CPU (line x.4)
+            
             if line_split[0] != '\n':
-                # Detect start of decoding simulation: current above 0.6A, starting to accumulate power
-                if float(line_split[-2][0:-2]) > intensity_thresh_high and pwr_beg == 0:
-                    pwr = float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
-                    ex_time_beg = str(line_split[0])
-                    pwr_beg = 1
-                    # print("enter beg")
+                # node-conso : take intensity and voltage to compute power of CPU (line x.4)
+                if line_split[1] == "0.4":
+                     # Detect start of decoding simulation: current above 0.6A, starting to accumulate power
+                    if float(line_split[-2][0:-2]) > intensity_thresh_high and pwr_beg == 0:
+                        pwr = float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
+                        ex_time_beg = str(line_split[0])
+                        pwr_beg = 1
+                        # print("enter beg")
 
-                # Line with simulation running: accumulating power
-                if float(line_split[-2][0:-2]) > intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
-                    pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
-                    # print("enter inter")
+                    # Line with simulation running: accumulating power
+                    if float(line_split[-2][0:-2]) > intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
+                        pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
+                        # print("enter inter")
 
-                # End of simulation: current return under 0.2A 
-                if float(line_split[-2][0:-2]) < intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
-                    pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
-                    ex_time_end = str(line_split[0])
-                    pwr_end = 1
-                    # Computing energy per bit =  energy / (enc_info_bits * n * nb_repeats)
-                    pwr = pwr / (enc_info_bits * n * nb_repeats)
+                    # End of simulation: current return under 0.2A 
+                    if float(line_split[-2][0:-2]) < intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
+                        pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
+                        ex_time_end = str(line_split[0])
+                        pwr_end = 1
+                        # Computing energy per bit =  energy / (enc_info_bits * n * nb_repeats)
+                        pwr = pwr / (enc_info_bits * n * nb_repeats)
 
-                    # Computing execution time
-                    ex_time = float(ex_time_end) - float(ex_time_beg)
-                    file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(ex_time):<30} \n')
-                    # print("enter end")
+                        # Computing execution time
+                        ex_time = float(ex_time_end) - float(ex_time_beg)
+                        file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(ex_time):<30} \n')
+                        # print("enter end")
+               
                     
     # Ressetting to zeros variables
     skip = 0
