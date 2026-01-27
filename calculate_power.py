@@ -148,7 +148,7 @@ for fname in energy_files:
                         print(line)
                         print("number of times current inferior to 2.5A", count, "\n")
 
-                    elif float(line_split[-2][0:-2]) > intensity_thresh_high : 
+                    elif pwr_end == 1 and float(line_split[-2][0:-2]) > intensity_thresh_high : 
                             count += 1
                  
                     
