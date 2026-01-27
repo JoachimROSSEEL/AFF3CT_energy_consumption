@@ -123,20 +123,16 @@ for fname in energy_files:
             # First condition : skipping first lines (time of sleep between node conso and launching polar decoding)
             # Second condition : take intensity and voltage to compute power of CPU (line x.4), after first lines are skipped
             if float(line_split[0]) > nb_skips and line_split[1] == "0.4":
-                    # Detect start of decoding simulation: current above 0.6A, starting to accumulate power
+                    # Detect start of decoding simulation: current above 2.5A, starting to accumulate power
                     if float(line_split[-2][0:-2]) > intensity_thresh_high and pwr_beg == 0:
                         pwr = float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
                         ex_time_beg = str(line_split[0])
                         pwr_beg = 1
-                        # print("enter beg")
                         print(line)
 
                     # Line with simulation running: accumulating power
                     elif float(line_split[-2][0:-2]) > intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
                         pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
-                        # print("enter inter")
-                        if float(line_split[-2][0:-2])< intensity_thresh_high: 
-                            count += 1
 
                     # End of simulation: current return under 0.2A 
                     elif float(line_split[-2][0:-2]) < intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
@@ -149,10 +145,12 @@ for fname in energy_files:
                         # Computing execution time
                         ex_time = float(ex_time_end) - float(ex_time_beg)
                         file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(ex_time):<30} \n')
-                        # print("enter end")
                         print(line)
                         print("number of times current inferior to 2.5A", count, "\n")
-               
+
+                    elif float(line_split[-2][0:-2]) > intensity_thresh_high : 
+                            count += 1
+                 
                     
     # Ressetting to zeros variables
     skip = 0
