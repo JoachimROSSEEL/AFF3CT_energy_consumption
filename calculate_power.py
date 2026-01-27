@@ -74,6 +74,7 @@ energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(en
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
 # Waiting time for simulation to launch (sleep between node-conso and launchin decoding)
+skip = 0
 nb_skips = 1000 # 1000 μs 
 
 # Variable to store the node configuration, the energy and the time for each file
@@ -121,12 +122,16 @@ for fname in energy_files:
         while '' in line_split:
             line_split.remove('')
  
-        # Avoid empty line
+        # Avoid empty lines
         if line_split[0] != '\n':
             
-            # First condition : skipping first lines (time of sleep between node conso and launching polar decoding)
-            # Second condition : take intensity and voltage to compute power of CPU (line x.4), after first lines are skipped
-            if float(line_split[0]) > nb_skips and line_split[1] == "0.4":
+            # Skipping first lines (time of sleep between node conso and launching polar decoding)
+            if skip < nb_skips:
+                skip +=1
+            
+            else:
+                # Take intensity and voltage to compute CPU power (line marked by x.4 in the second column of a power file)
+                if line_split[1] == "0.4":
                     # Detect start of decoding simulation: current above 2.5A, starting to accumulate power
                     if float(line_split[-2][0:-2]) > intensity_thresh_high and pwr_beg == 0:
                         pwr = float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
@@ -155,6 +160,7 @@ for fname in energy_files:
                         print("Number of times current inferior to 2.8A during simulation", count, "\n")
                         
     # Ressetting to zeros variables
+    skip = 0
     pwr_beg = 0 
     pwr_end = 1
     pwr = 0
