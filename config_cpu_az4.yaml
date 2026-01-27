@@ -1,0 +1,11 @@
+driver: "acpi"
+cpufreq:
+  - governor: userspace
+    policies: "0-2"
+    frequency: "2500000"
+  - governor: performance
+    policies: "4"
+cpuidle:
+  - cpus: "0-9"
+    idle_states: "1"
+    disable: true
