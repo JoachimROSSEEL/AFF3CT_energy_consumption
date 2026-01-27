@@ -73,23 +73,28 @@ energy_folder = "/scratch/rosseelj/conso"
 # energy_folder = "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
-# Counter to skipping first lines of energy files (time to initialized consummed energy to 0 on cluster + waiting time for simulation to launch)
-skip = 0
-nb_skips = 1000 # 1000μs 
+# Waiting time for simulation to launch (sleep between node-conso and launchin decoding)
+nb_skips = 1000 # 1000 μs 
+
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
+
 # Low intensity treshold : if below, no simulation is running
 intensity_thresh_low = 2.0
+
 # High intensity treshold : if superior, a simulation is running
 intensity_thresh_high = 2.5 
+
 # Boolean : 
 #   - 0 if polar decoding has not started (Intensity inferior to intensity_thresh_high)
 #   - 1 to start accumulating consummed power (Intensity superior to intensity_thresh_high)
 pwr_beg = 0 
+
 # Boolean : 
 #   - 0 if polar decoding still runnning (Intensity superior to intensity_thresh_low)
 #   - 1 to stop accumulating consummed power (Intensity superior to intensity_thresh_low)
 pwr_end = 0 
+
 # Variable to store power consumption (in)
 pwr = 0
 
@@ -99,10 +104,9 @@ ex_time_beg = 0
 ex_time_end = 0
 # Duration of polar decoding simulation
 ex_time = 0
-# e_thresh_low different from e_thresh_high to ensure fluctuations don't impact detection (Sometimes, peak of current)
 
 # Count number of times current is inferior to intensity_thresh_high during decoding simulation
-count = 0
+count = 0 
 
 for fname in energy_files:
     print(fname)
@@ -133,6 +137,8 @@ for fname in energy_files:
                     # Line with simulation running: accumulating power
                     elif float(line_split[-2][0:-2]) > intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
                         pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
+                        if float(line_split[-2][0:-2])< 2.8: 
+                            count += 1
 
                     # End of simulation: current return under 0.2A 
                     elif float(line_split[-2][0:-2]) < intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
@@ -146,14 +152,9 @@ for fname in energy_files:
                         ex_time = float(ex_time_end) - float(ex_time_beg)
                         file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(ex_time):<30} \n')
                         print(line)
+                        print("Number of times current inferior to 2.8A during simulation", count, "\n")
                         
-                    elif pwr_end == 1 and float(line_split[-2][0:-2]) > intensity_thresh_high : 
-                            count += 1
-                            print("Number of times current superior to 2.5A after end of simulation:", count, "\n")
-                 
-                    
     # Ressetting to zeros variables
-    skip = 0
     pwr_beg = 0 
     pwr_end = 1
     pwr = 0
