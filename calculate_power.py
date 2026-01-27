@@ -146,10 +146,10 @@ for fname in energy_files:
                         ex_time = float(ex_time_end) - float(ex_time_beg)
                         file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(ex_time):<30} \n')
                         print(line)
-                        print("number of times current inferior to 2.5A", count, "\n")
-
+                        
                     elif pwr_end == 1 and float(line_split[-2][0:-2]) > intensity_thresh_high : 
                             count += 1
+                            print("Number of times current superior to 2.5A after end of simulation:", count, "\n")
                  
                     
     # Ressetting to zeros variables
