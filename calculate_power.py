@@ -73,9 +73,12 @@ energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(en
 # energy_folder = "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
-# Waiting time for simulation to launch (sleep between node-conso and launchin decoding)
+# Skip first lines (often lines from previous simulations)
 skip = 0
-nb_skips = 1000 # 1000 μs 
+nb_skips = 100 
+
+# Waiting time for simulation to launch (sleep between node-conso and launchin decoding)
+sleep_time = 1000 # 100 μs
 
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
@@ -130,8 +133,9 @@ for fname in energy_files:
                 skip +=1
             
             else:
-                # Take intensity and voltage to compute CPU power (line marked by x.4 in the second column of a power file)
-                if line_split[1] == "0.4":
+                # First condition : skipping sleep time, between node conso and launching polar decoding
+                # Second condition : Take intensity and voltage to compute CPU power (line marked by x.4 in the second column of a power file)
+                if float(line_split[0]) > sleep_time and line_split[1] == "0.4":
                     # Detect start of decoding simulation: current above 2.5A, starting to accumulate power
                     if float(line_split[-2][0:-2]) > intensity_thresh_high and pwr_beg == 0:
                         pwr = float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
