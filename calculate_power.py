@@ -75,13 +75,13 @@ energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder,
 
 # Counter to skipping first lines of energy files (time to initialized consummed energy to 0 on cluster + waiting time for simulation to launch)
 skip = 0
-nb_skips = 25 # 1050μs 
+nb_skips = 1000 # 1000μs 
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
 # Low intensity treshold : if below, no simulation is running
-intensity_thresh_low = 2.5
+intensity_thresh_low = 2.0
 # High intensity treshold : if superior, a simulation is running
-intensity_thresh_high = 2.90 
+intensity_thresh_high = 2.5 
 # Boolean : 
 #   - 0 if polar decoding has not started (Intensity inferior to intensity_thresh_high)
 #   - 1 to start accumulating consummed power (Intensity superior to intensity_thresh_high)
@@ -101,6 +101,9 @@ ex_time_end = 0
 ex_time = 0
 # e_thresh_low different from e_thresh_high to ensure fluctuations don't impact detection (Sometimes, peak of current)
 
+# Count number of times current is inferior to intensity_thresh_high during decoding simulation
+count = 0
+
 for fname in energy_files:
     print(fname)
     node_config = fname.split("_")[-1]
@@ -108,31 +111,35 @@ for fname in energy_files:
     print(node_config)
     f = open(energy_folder + "/" + fname, "r")
     for line in f:
-        if skip < nb_skips : 
-            skip += 1
-        else : 
-            line_split = line.split(" ")
-            # Remove empty blank
-            while '' in line_split:
-                line_split.remove('')
+        # Splitting line
+        line_split = line.split(" ")
+        # Removing empty blanks
+        while '' in line_split:
+            line_split.remove('')
+ 
+        # Avoid empty line
+        if line_split[0] != '\n':
             
-            if line_split[0] != '\n':
-                # node-conso : take intensity and voltage to compute power of CPU (line x.4)
-                if line_split[1] == "0.4":
-                     # Detect start of decoding simulation: current above 0.6A, starting to accumulate power
+            # First condition : skipping first lines (time of sleep between node conso and launching polar decoding)
+            # Second condition : take intensity and voltage to compute power of CPU (line x.4), after first lines are skipped
+            if float(line_split[0]) > nb_skips and line_split[1] == "0.4":
+                    # Detect start of decoding simulation: current above 0.6A, starting to accumulate power
                     if float(line_split[-2][0:-2]) > intensity_thresh_high and pwr_beg == 0:
                         pwr = float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
                         ex_time_beg = str(line_split[0])
                         pwr_beg = 1
                         # print("enter beg")
+                        print(line)
 
                     # Line with simulation running: accumulating power
-                    if float(line_split[-2][0:-2]) > intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
+                    elif float(line_split[-2][0:-2]) > intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
                         pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
                         # print("enter inter")
+                        if float(line_split[-2][0:-2])< intensity_thresh_high: 
+                            count += 1
 
                     # End of simulation: current return under 0.2A 
-                    if float(line_split[-2][0:-2]) < intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
+                    elif float(line_split[-2][0:-2]) < intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
                         pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
                         ex_time_end = str(line_split[0])
                         pwr_end = 1
@@ -143,6 +150,8 @@ for fname in energy_files:
                         ex_time = float(ex_time_end) - float(ex_time_beg)
                         file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(ex_time):<30} \n')
                         # print("enter end")
+                        print(line)
+                        print("number of times current inferior to 2.5A", count, "\n")
                
                     
     # Ressetting to zeros variables
