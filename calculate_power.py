@@ -65,7 +65,7 @@ nb_repeats = 10
 name_file_conso_per_nodes = "power/power_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_" + dec + "_" + dec_implem + ".txt" 
 # fields_name = ["Nodes_configuration", "Energy(J)", "Time(μs)"]
 file_conso_per_nodes = open(name_file_conso_per_nodes, "w+")
-file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Power(W/bit)":<30}  {"Time(μs)":<30} \n')
+file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Power(W/bit)":<30} {"Time(μs)":<30} \n')
 
 # Getting energy file of each polar nodes configuration
 # energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
@@ -84,7 +84,7 @@ sleep_time = 1000 # 100 μs
 node_config = ""
 
 # Low intensity treshold : if below, no simulation is running
-intensity_thresh_low = 2.0
+intensity_thresh_low = 1.5
 
 # High intensity treshold : if superior, a simulation is running
 intensity_thresh_high = 2.5 
@@ -175,7 +175,7 @@ for fname in energy_files:
     count_inf = 0
     count_sup = 0
     pwr_beg = 0 
-    pwr_end = 1
+    pwr_end = 0
     pwr = 0
     ex_time_beg = 0
     ex_time_end = 0
