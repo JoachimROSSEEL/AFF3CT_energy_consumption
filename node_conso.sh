@@ -12,12 +12,18 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
+# Load module cpudev : enables to modify the CPU driver, its governor, its frequency per core, idle states, and so on
+# module load cpudev
+
+# # Apply CPU configuration from yaml file
+# cpudev apply --config config_cpu_az4.yaml
+
 sleep 1
 
 module load ncm/gdcc873f
 
-touch /scratch/rosseelj/conso/conso_TX_RX.txt
+touch /scratch/rosseelj/conso/conso_vide.txt
 
 node-conso -P 1
 node-conso -m 1
-node-conso -M 1 -t 60 > /scratch/rosseelj/conso/conso_TX_RX.txt
+node-conso -M 1 -t 30 > /scratch/rosseelj/conso/conso_vide.txt
