@@ -22,8 +22,11 @@ sleep 1
 
 module load ncm/gdcc873f
 
-touch /scratch/rosseelj/conso/conso_vide.txt
+touch /scratch/rosseelj/conso/conso_test.txt
 
-node-conso -P 1
+node-conso -P 1 # <= turn on I2C chain 1
+node-conso -P 2 # <= turn on I2C chain 2
 node-conso -m 1
-node-conso -M 1 -t 30 > /scratch/rosseelj/conso/conso_vide.txt
+node-conso -m 2
+node-conso -M 1 -t 30 > /scratch/rosseelj/conso/conso_test.txt
+node-conso -M 2
