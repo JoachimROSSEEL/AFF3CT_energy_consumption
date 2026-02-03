@@ -12,11 +12,11 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
-# Load module cpudev : enables to modify the CPU driver, its governor, its frequency per core, idle states, and so on
-module load cpudev
+# # Load module cpudev : enables to modify the CPU driver, its governor, its frequency per core, idle states, and so on
+# module load cpudev
 
-# Apply CPU configuration from yaml file
-cpudev apply --config config_cpu_az4.yaml
+# # Apply CPU configuration from yaml file
+# cpudev apply --config config_cpu_az4.yaml
 
 # Source node-conso
 # source /etc/profile
@@ -26,12 +26,17 @@ module load ncm/gdcc873f
 
 # Starting the  board
 node-conso -P 1
+node-conso -P 2
 
 # Clearing registers
 node-conso -m 1
+node-conso -m 2
 
 # Lauching node consumption measurement
-node-conso -M 1 -t 300 > /scratch/rosseelj/conso/conso_TX_RX.txt &
+node-conso -M 1
+node-conso -t 300 > /scratch/rosseelj/conso/conso_TX_RX.txt 
+node-conso -M 2
+
 
 sleep 1
 
