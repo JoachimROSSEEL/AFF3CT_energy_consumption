@@ -25,9 +25,11 @@ module load ncm/gdcc873f
 
 # Starting the  board
 node-conso -P 1
+node-conso -P 2
 
 # Clearing registers
 node-conso -m 1
+node-conso -m 2
 
 # Lauching node consumption measurement
 node-conso -M 1 
