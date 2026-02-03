@@ -17,6 +17,9 @@ start=`date +%s`
 # Make folder to store energy measurement
 mkdir -p $2
 
+# Source node-conso
+source /etc/profile
+
 # Load node conso
 module load ncm/gdcc873f
 
