@@ -40,6 +40,12 @@ node-conso -P 1 # <= turn on I2C chain 1
 node-conso -P 2 # <= turn on I2C chain 2
 node-conso -m 1
 node-conso -m 2
-node-conso -M 1 
-node-conso -M 2
+node-conso -M 1
 node-conso -t 30 > /scratch/rosseelj/conso/conso_test.txt
+node-conso -M 2
+
+# Close ncm
+node-conso -m 1
+node-conso -m 2
+node-conso -p 1
+node-conso -p 2
