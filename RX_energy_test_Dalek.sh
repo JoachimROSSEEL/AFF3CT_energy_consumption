@@ -17,8 +17,14 @@ start=`date +%s`
 # Make folder to store energy measurement
 mkdir -p $2
 
-# Source node-conso
+# Source node-conso and cpudev
 source /etc/profile
+
+# Load module cpudev : enables to modify the CPU driver, its governor, its frequency per core, idle states, and so on
+module load cpudev
+
+# Apply CPU configuration from yaml file
+cpudev apply config_cpu_az4.yaml
 
 # Load node conso
 module load ncm/gdcc873f
@@ -50,7 +56,11 @@ end=`date +%s`
 runtime=$((end-start))
 echo "runtime is $runtime s."
 
-#exit 0
+# Close ncm
+node-conso -m 1
+node-conso -m 2
+node-conso -p 1
+node-conso -p 2
 
 
 
