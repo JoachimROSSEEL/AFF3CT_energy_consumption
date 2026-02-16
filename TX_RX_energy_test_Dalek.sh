@@ -26,16 +26,16 @@ module load ncm/gdcc873f
 
 # Starting the  board
 node-conso -P 1
-# node-conso -P 2
+node-conso -P 2
 
 # Clearing registers
 node-conso -m 1
-# node-conso -m 2
+node-conso -m 2
 
 # Lauching node consumption measurement
 node-conso -M 1
 node-conso -t 500 > /scratch/rosseelj/conso/conso_TX_RX.txt &
-# node-conso -M 2
+node-conso -M 2
 
 
 sleep 1
@@ -81,4 +81,8 @@ taskset -c 0 ./TX_RX_energy_test --crc-poly "0x8005" --crc-size 16 --crc-info-bi
 
 wait
 
-# exit 0
+# Close ncm
+node-conso -m 1
+node-conso -m 2
+node-conso -p 1
+node-conso -p 2
