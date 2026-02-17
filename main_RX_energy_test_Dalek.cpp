@@ -191,7 +191,7 @@ int main(int argc, char** argv, char** env) {
     ///////////////////////////////////
     // Simulation execution
     
-    int nb_repeat = 20; 
+    int nb_repeat = 10; 
     for (int k = 0; k < nb_repeat; k++)
     {
         for (size_t i = 0; i < monitor_factory.max_frame; i++){
@@ -222,15 +222,17 @@ int main(int argc, char** argv, char** env) {
     std::cout << "End !" << std::endl;
     
     // File to write execution time
-    std::string filepath_runtime = "/scratch/rosseelj/runtime/runtime_RX_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type;
+    std::string dec_name(argv[argc-3]);
+    std::string nodes(argv[argc-1]);
+    std::string filepath_runtime = "/scratch/rosseelj/runtime/runtime_RX_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type + "_Decoder_polar_" + dec_name;
     // argc-3 : Decoder and argc-1 : node configuation
-    std::string filename_runtime = "/Decoder_polar_" + std::to_string(*argv[argc-3]) + "_nodes_" + std::to_string(*argv[argc-1]) + ".txt";
+    std::string filename_runtime = "/Decoder_polar_" + dec_name + "_nodes_" + nodes + ".txt";
     std::filesystem::create_directory(filepath_runtime);
     filename = filepath_runtime + filename_runtime;
     std::ofstream filestream_runtime;
     filestream_runtime.open(filename_runtime);
     filestream_runtime << "Node_configuration Run_Time(s) \n";
-    filestream_runtime << std::to_string(*argv[argc-1]) + " " + std::to_string(elapsed_seconds.count()) + "\n";
+    filestream_runtime << dec_name + " " + std::to_string(elapsed_seconds.count()) + "\n";
     filestream_runtime.close();
     std::cout << "End !" << std::endl;
 
