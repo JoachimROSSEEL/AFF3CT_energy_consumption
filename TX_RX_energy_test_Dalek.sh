@@ -12,6 +12,8 @@
 # Declare job non-rerunable
 #SBATCH --no-requeue
 
+start=`date +%s`
+
 # Source node-conso and cpudev
 source /etc/profile
 
@@ -80,6 +82,10 @@ taskset -c 0 ./TX_RX_energy_test --crc-poly "0x8005" --crc-size 16 --crc-info-bi
 # "{R0,R1,R0L,REP,REPL,SPC}"
 
 wait
+
+end=`date +%s`
+runtime=$((end-start))
+echo "TX_RX SC(4096,2048) $runtime s" > /scratch/rosseelj/runtime/runtime_TX_RX.txt
 
 # Close ncm
 node-conso -m 1
