@@ -6,6 +6,9 @@
 
 #include <fstream>
 
+#include <chrono>
+#include <ctime>
+
 
 using namespace aff3ct;
 
@@ -46,7 +49,8 @@ struct utils1
 int main(int argc, char** argv, char** env) {
 
     std::cout << "Start !" << std::endl;
-    
+    auto start = std::chrono::system_clock::now();
+
     // Creating factories for CRC, polar codec, channel and noise level
     factory::CRC CRC_factory;
     factory::Codec_polar codec_polar_factory;
@@ -73,11 +77,9 @@ int main(int argc, char** argv, char** env) {
     // CRC from factory CRC 
     auto CRC = *CRC_factory.build();
     const std::string poly_key = CRC_factory.type;
-    //std::cout << poly_key  << " crc type facto\n";
 
     // CRC size
     int CRC_size =  CRC.get_size();
-    //std::cout << CRC_size  << " CRC size\n";
 
     // Number of information bits for polar encoder
     int K = CRC.get_K();
@@ -87,11 +89,10 @@ int main(int argc, char** argv, char** env) {
 
     // Noise level
     double ebn0_min = noise_factory.range[0]; // Minimum SNR value in dB
-    // std::cout << ebn0_min << " = ebno_min\n";
+
     double ebn0_max = noise_factory.range.back(); // Maximum SNR value in dB
-    // std::cout << ebn0_max << " = ebno_max\n";
+
     double ebn0_step = 0.25; // SNR step in dB
-    // std::cout << ebn0_step << " = ebno_step\n";
 
     std::vector<double> ebn0; // Vector to hold Eb/N0 values
     for (double val = ebn0_min; val < ebn0_max; val += ebn0_step) {
@@ -114,7 +115,6 @@ int main(int argc, char** argv, char** env) {
     // Modules not created from factory
 
     // Binary source of information bits
-    //spu::module::MySource_binary     src  (K - CRC_size);
     spu::module::Source_random<> src(K, 12);
 
     // BPSK Modem
@@ -226,19 +226,6 @@ int main(int argc, char** argv, char** env) {
         dec_full_name = dec_full_name + "_nodes_" + arg1.substr(found + 18, arg1.length() - (found + 19));
     }  
 
-    // // FER file according to the decoder 
-    // std::string filename_FER = "FER/FER_polar_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type + "_" 
-    // + dec_full_name + ".txt";
-    // std::ofstream filestream_FER;
-    // filestream_FER.open(filename_FER);
-
-    // // BER file according to the decoder 
-    // std::string filename_BER = "BER/BER_polar_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type + "_" 
-    // + dec_full_name + ".txt";
-    // std::ofstream filestream_BER;
-    // filestream_BER.open(filename_BER);
-
-    
     ///////////////////////////////////
     // Simulation execution
 
@@ -266,18 +253,26 @@ int main(int argc, char** argv, char** env) {
         monitor.reset();
     } 
     spu::tools::Statistics::show(seq.get_tasks_per_types());
-    //seq.show_stats();
-    //tracker.save_csv("results_polar.csv");
-    std::cout << "End !" << std::endl;
-    //stats_output_f.close();
     
-    // int j = 0;
-    // for(j = 0; j < sigma_vals.size(); j++)
-    // {
-    //     filestream_FER << std::to_string(ebn0[j]) + " " + std::to_string(fer[j]) + "\n";
-    //     filestream_BER << std::to_string(ebn0[j]) + " " + std::to_string(ber[j]) + "\n";
-    // }
-    // filestream_FER.close();
-    // filestream_BER.close();
+    // Time measurement
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s"
+              << std::endl;
+
+    // File to write execution time
+    std::string filepath = "/scratch/rosseelj/runtime/runtime_TX_RX_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type;
+    std::string filename = "/" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type + ".txt";
+    std::filesystem::create_directory(filepath);
+    filename = filepath + filename;
+    std::ofstream filestream;
+    filestream.open(filename);
+    filestream << "Node_configuration Run_Time(s) \n";
+    filestream << "{Default} " + std::to_string(elapsed_seconds.count()) + "\n";
+    filestream.close();
+    std::cout << "End !" << std::endl;
 
 }
