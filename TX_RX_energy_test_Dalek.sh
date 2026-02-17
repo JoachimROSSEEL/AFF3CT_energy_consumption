@@ -37,7 +37,7 @@ node-conso -m 2
 # Lauching node consumption measurement
 node-conso -M 1
 node-conso -t 500 > /scratch/rosseelj/conso/conso_TX_RX.txt &
-node-conso -M 2
+# node-conso -M 2
 
 
 sleep 1
