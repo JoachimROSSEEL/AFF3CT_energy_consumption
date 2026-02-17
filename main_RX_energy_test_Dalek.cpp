@@ -45,11 +45,9 @@ int main(int argc, char** argv, char** env) {
     // CRC from factory CRC 
     auto CRC = *CRC_factory.build();
     const std::string poly_key = CRC_factory.type;
-    //std::cout << poly_key  << " crc type facto\n";
 
     // CRC size
     int CRC_size =  CRC.get_size();
-    //std::cout << CRC_size  << " CRC size\n";
 
     // Number of information bits for polar encoder
     int K = CRC.get_K();
@@ -74,11 +72,11 @@ int main(int argc, char** argv, char** env) {
 
     // Noise level
     double ebn0_min = noise_factory.range[0]; // Minimum SNR value in dB
-    // std::cout << ebn0_min << " = ebno_min\n";
+
     double ebn0_max = noise_factory.range.back(); // Maximum SNR value in dB
-    // std::cout << ebn0_max << " = ebno_max\n";
+
     double ebn0_step = 1; // SNR step in dB
-    // std::cout << ebn0_step << " = ebno_step\n";
+
 
     std::vector<double> ebn0; // Vector to hold Eb/N0 values
     for (double val = ebn0_min; val < ebn0_max; val += ebn0_step) {
@@ -132,8 +130,6 @@ int main(int argc, char** argv, char** env) {
     monitor[aff3ct::module::mnt::sck::check_errors::U]        = CRC_poly[aff3ct::module::crc::sck::extract::V_K2];
     std::vector<float> sigma(1);
     sigma[0] = 0.01f; // Set the noise level 
-    // channel[aff3ct::module::chn::sck::add_noise::CP].bind(sigma);
-    // mon_modem[aff3ct::module::mdm::sck::demodulate::CP].bind(sigma);
     
     ///////////////////////////////////
     // Sequence creation
@@ -195,7 +191,7 @@ int main(int argc, char** argv, char** env) {
     ///////////////////////////////////
     // Simulation execution
     
-    int nb_repeat = 10; 
+    int nb_repeat = 20; 
     for (int k = 0; k < nb_repeat; k++)
     {
         for (size_t i = 0; i < monitor_factory.max_frame; i++){
@@ -213,17 +209,7 @@ int main(int argc, char** argv, char** env) {
         } 
         monitor.reset();
         logger.reset();
-        //std::cout << "one repeat\n";
     }
-    //spu::tools::Statistics::show(seq.get_tasks_per_types());
-    //seq.show_stats();
-
-    // Saving energy consumption
-    // std::string filepath_energy = "energy/energy_polar_2_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type + "_" 
-    // + decoder.get_name();
-    // //std::filesystem::current_path(std::filesystem::temp_directory_path());
-    // std::filesystem::create_directory(filepath_energy);
-    // std::string filename_energy =  filepath_energy + "/" + dec_full_name + ".csv";
 
     // Time measurement
     auto end = std::chrono::system_clock::now();
@@ -234,6 +220,18 @@ int main(int argc, char** argv, char** env) {
               << "elapsed time: " << elapsed_seconds.count() << "s"
               << std::endl;
     std::cout << "End !" << std::endl;
-    //stats_output_f.close();
+    
+    // File to write execution time
+    std::string filepath = "/scratch/rosseelj/runtime/runtime_RX_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type;
+    // argc-3 : Decoder and argc-1 : node configuation
+    std::string filename = "/Decoder_polar_" + argv[argc-3] + "_nodes_" + argv[argc-1] + ".txt";
+    std::filesystem::create_directory(filepath);
+    filename = filepath + filename;
+    std::ofstream filestream;
+    filestream.open(filename);
+    filestream << "Node_configuration Run_Time(s) \n";
+    filestream << argv[argc-1] + " " + std::to_string(elapsed_seconds.count()) + "\n";
+    filestream.close();
+    std::cout << "End !" << std::endl;
 
 }
