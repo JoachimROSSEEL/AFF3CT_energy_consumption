@@ -84,10 +84,10 @@ sleep_time = 1000 # 100 μs
 node_config = ""
 
 # Low intensity treshold : if below, no simulation is running
-intensity_thresh_low = 1.5
+intensity_thresh_low = 1.2
 
 # High intensity treshold : if superior, a simulation is running
-intensity_thresh_high = 2.5 
+intensity_thresh_high = 1.3
 
 # Boolean : 
 #   - 0 if polar decoding has not started (Intensity inferior to intensity_thresh_high)
