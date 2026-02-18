@@ -61,65 +61,81 @@ n = 100000 - 1
 # Number of times the noisy codewords data set is decoded
 nb_repeats = 10
 
-# File for storing the consummed energy and execution time per polar nodes configuaration
-name_file_conso_per_nodes = "power/power_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_" + dec + "_" + dec_implem + ".txt" 
+# Variable to store power
+pwr = 0
+
+# Boolean to write in file_conso_per_nodes once decoding runtime is reached
+write_bool = False               
+
+# Counter to skip nb_skips first lines (some noisy lines from previous measures can be present)
+skip = 0
+nb_skips = 100 
+
+# Waiting time for simulation to launch (sleep between node-conso and launchin decoding)
+sleep_time = 1000 # 1000 μs
+
+# Variable to store the node configuration, the energy and the time for each file
+node_config = ""
+
+# File for storing the consummed energy and execution time per polar nodes configuration
+name_file_conso_per_nodes = "power_az4/power_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_" + dec + "_" + dec_implem + ".txt" 
 # fields_name = ["Nodes_configuration", "Energy(J)", "Time(μs)"]
 file_conso_per_nodes = open(name_file_conso_per_nodes, "w+")
 file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Power(W/bit)":<30} {"Time(μs)":<30} \n')
 
 # Getting energy file of each polar nodes configuration
-# energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
-energy_folder = "/scratch/rosseelj/conso"
+energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
+# energy_folder = "/scratch/rosseelj/conso"
 # energy_folder = "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
-# Skip first lines (often lines from previous simulations)
-skip = 0
-nb_skips = 100 
+# Getting running time of decoding for each polar nodes configuration
+runtime_folder = "/scratch/rosseelj/runtime/runtime_RX_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
+# runtime_folder = "runtime"
+runtime_files  = [f for f in listdir(runtime_folder) if isfile(join(runtime_folder, f))]
 
-# Waiting time for simulation to launch (sleep between node-conso and launchin decoding)
-sleep_time = 1000 # 100 μs
+# Storing runtime for each node configuration in list_runtimes, according to its order in runtime_files
+# list_runtimes[i] corresponds to node configuration i in list_nodes_runtime
+list_nodes_runtime = []
+list_runtimes = []
+for f in runtime_files:
+    # Getting nodes config and adding it to list_nodes_runtime
+    node_config = f.split("_")[-1]
+    node_config = node_config.split(".")[0]
+    list_nodes_runtime.append(node_config)
 
-# Variable to store the node configuration, the energy and the time for each file
-node_config = ""
-
-# Low intensity treshold : if below, no simulation is running
-intensity_thresh_low = 1.2
-
-# High intensity treshold : if superior, a simulation is running
-intensity_thresh_high = 1.3
-
-# Boolean : 
-#   - 0 if polar decoding has not started (Intensity inferior to intensity_thresh_high)
-#   - 1 to start accumulating consummed power (Intensity superior to intensity_thresh_high)
-pwr_beg = 0 
-
-# Boolean : 
-#   - 0 if polar decoding still runnning (Intensity superior to intensity_thresh_low)
-#   - 1 to stop accumulating consummed power (Intensity superior to intensity_thresh_low)
-pwr_end = 0 
-
-# Variable to store power consumption (in)
-pwr = 0
-
-# Start time at the start of polar decoding simulation
-ex_time_beg = 0
-# Start time at the start of polar decoding simulation
-ex_time_end = 0
-# Duration of polar decoding simulation
-ex_time = 0
-
-# Count number of times current is inferior to intensity_thresh_high during decoding simulation
-count_inf = 0 
-
-# Count number of times current is inferior to intensity_thresh_high after decoding simulation
-count_sup = 0 
+    # Getting runtime for each node configuration and adding it to list_runtimes 
+    file_runtime = open(runtime_folder + "/" + f, "r")
+    
+    # Files composed of two line : 
+    #  - Description of each column: Nodes configuration and runtime in seconds
+    #  - Values of node configuration and runtime
+    n_line = 0 # line number
+    for line in file_runtime:
+        if n_line == 1:
+            runtime = line.split(" ")[1]
+            runtime = runtime.split("\n")[0]
+            list_runtimes.append(float(runtime))
+        n_line =+ 1 
+        # Skip first line (description of each column)
+    file_runtime.close()
 
 for fname in energy_files:
-    print(fname)
+
+    # Getting node configuration
     node_config = fname.split("_")[-1]
     node_config = node_config.split(".")[0]
-    print(node_config)
+
+    # Getting decoding runtime for the node configuration
+    ind_node_config = list_nodes_runtime.index(node_config)
+    runtime = list_runtimes[ind_node_config] * 1000 # multiply by 1000 to convert to μs
+
+    # Resseting variables to their initial values
+    pwr = 0
+    write_bool = False               
+    skip = 0
+
+    # Reading energy file (output of node-conso)
     f = open(energy_folder + "/" + fname, "r")
     for line in f:
         # Splitting line
@@ -130,56 +146,24 @@ for fname in energy_files:
  
         # Avoid empty lines
         if line_split[0] != '\n':
-            
-            # Skipping first lines (time of sleep between node conso and launching polar decoding)
+
+            # Skipping first lines 
             if skip < nb_skips:
                 skip += 1
             
-            else:
-                # First condition : skipping sleep time, between node conso and launching polar decoding
-                # Second condition : Take intensity and voltage to compute CPU power (line marked by x.4 in the second column of a power file)
-                if float(line_split[0]) > sleep_time and line_split[1] == "0.4":
-                    # Detect start of decoding simulation: current above 2.5A, starting to accumulate power
-                    if float(line_split[-2][0:-2]) > intensity_thresh_high and pwr_beg == 0:
-                        pwr = float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
-                        ex_time_beg = str(line_split[0])
-                        pwr_beg = 1
-                        print(line)
+            # Otherwise, we compute power during decoding runtime
+            # First condition : skipping sleep time, between node conso and launching polar decoding
+            # Second condition : stop when decoding runtime is reached
+            elif float(line_split[0]) > sleep_time and float(line_split[0]) < runtime:
+                # Take only intensity and voltage of CPU to compute power (line marked by x.4 in the second column of an energy file)
+                if line_split[1] == "0":
+                    pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
 
-                    # Line with simulation running: accumulating power
-                    elif float(line_split[-2][0:-2]) > intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
-                        pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
-                        if float(line_split[-2][0:-2])< 2.8: 
-                            count_inf += 1
+            # Writing in file_conso_per_nodes 
+            elif float(line_split[0]) > runtime and write_bool == False:
+                file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(runtime/1000):<30} \n')
+                write_bool = True
 
-                    # End of simulation: current return under 0.2A 
-                    elif float(line_split[-2][0:-2]) < intensity_thresh_low and pwr_beg != 0 and pwr_end == 0:
-                        pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
-                        ex_time_end = str(line_split[0])
-                        pwr_end = 1
-                        # Computing energy per bit =  energy / (enc_info_bits * n * nb_repeats)
-                        pwr = pwr / (enc_info_bits * n * nb_repeats)
-
-                        # Computing execution time
-                        ex_time = float(ex_time_end) - float(ex_time_beg)
-                        file_conso_per_nodes.write(f'{node_config:<30} {str(pwr):<30} {str(ex_time):<30} \n')
-                        print(line)
-                        print("Number of times current inferior to 2.8A during simulation", count_inf, "\n")
-
-                    elif pwr_end == 1 and float(line_split[-2][0:-2]) > 2.8: 
-                        count_sup += 1      
-                        
-    print("Number of times current superior to 2.8A after simulation", count_sup, "\n")                    
-    # Ressetting to zeros variables
-    skip = 0
-    count_inf = 0
-    count_sup = 0
-    pwr_beg = 0 
-    pwr_end = 0
-    pwr = 0
-    ex_time_beg = 0
-    ex_time_end = 0
-    ex_time = 0
     f.close()
 
 file_conso_per_nodes.close()
