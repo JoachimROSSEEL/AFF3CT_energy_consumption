@@ -222,10 +222,8 @@ int main(int argc, char** argv, char** env) {
     std::cout << "End !" << std::endl;
     
     // File to write execution time
-    std::string dec_name(argv[argc-3]);
+    std::string dec_name(argv[argc-4]);
     std::string nodes(argv[argc-1]);
-    std::cout << dec_name << "\n";
-    std::cout << nodes << "\n";
     std::string filepath_runtime = "/scratch/rosseelj/runtime/runtime_RX_" + std::to_string(N) + "_" + std::to_string(encoder.get_K()) + "_CRC_" + CRC_factory.type + "_Decoder_polar_" + dec_name;
     // argc-3 : Decoder and argc-1 : node configuation
     std::string filename_runtime = "/Decoder_polar_" + dec_name + "_nodes_" + nodes + ".txt";
@@ -234,7 +232,7 @@ int main(int argc, char** argv, char** env) {
     std::ofstream filestream_runtime;
     filestream_runtime.open(filename_runtime);
     filestream_runtime << "Node_configuration Run_Time(s) \n";
-    filestream_runtime << dec_name + " " + std::to_string(elapsed_seconds.count()) + "\n";
+    filestream_runtime << nodes + " " + std::to_string(elapsed_seconds.count()) + "\n";
     filestream_runtime.close();
     std::cout << "End !" << std::endl;
 
