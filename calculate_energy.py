@@ -84,14 +84,14 @@ file_conso_per_nodes = open(name_file_conso_per_nodes, "w+")
 file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Power(W/bit)":<30} {"Time(μs)":<30} \n')
 
 # Getting energy file of each polar nodes configuration
-# energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
+energy_folder = "/scratch/rosseelj/energy/energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 # energy_folder = "/scratch/rosseelj/conso"
-energy_folder = "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
+# energy_folder = "energy_polar_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
 energy_files  = [f for f in listdir(energy_folder) if isfile(join(energy_folder, f))]
 
 # Getting running time of decoding for each polar nodes configuration
-# runtime_folder = "/scratch/rosseelj/runtime/runtime_RX_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
-runtime_folder = "runtime"
+runtime_folder = "/scratch/rosseelj/runtime/runtime_RX_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_Decoder_polar_" + dec 
+# runtime_folder = "runtime"
 runtime_files  = [f for f in listdir(runtime_folder) if isfile(join(runtime_folder, f))]
 
 # Storing runtime for each node configuration in list_runtimes, according to its order in runtime_files
