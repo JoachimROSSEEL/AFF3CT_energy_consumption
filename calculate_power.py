@@ -77,10 +77,11 @@ sleep_time = 1000 # 1000 μs
 # Variable to store the node configuration, the energy and the time for each file
 node_config = ""
 
-# File for storing the consummed energy and execution time per polar nodes configuration
-name_file_conso_per_nodes = "power_az4/power_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_" + dec + "_" + dec_implem + ".txt" 
+# Folder and file for storing the consummed energy and execution time per polar nodes configuration
+power_res_folder = "power_az4_7900/"
+name_file_conso_per_nodes = "power_" + str(N) + "_" + str(enc_info_bits) + "_CRC_" + crc_poly + "_" + dec + "_" + dec_implem + ".txt" 
 # fields_name = ["Nodes_configuration", "Energy(J)", "Time(μs)"]
-file_conso_per_nodes = open(name_file_conso_per_nodes, "w+")
+file_conso_per_nodes = open(join(power_res_folder,name_file_conso_per_nodes), "w+")
 file_conso_per_nodes.write(f'{"Nodes_configuration":<30} {"Power(W/bit)":<30} {"Time(μs)":<30} \n')
 
 # Getting energy file of each polar nodes configuration
