@@ -157,7 +157,7 @@ for fname in energy_files:
             # Second condition : stop when decoding runtime is reached
             elif float(line_split[0]) > sleep_time and float(line_split[0]) < runtime:
                 # Take only intensity and voltage of CPU to compute power (line marked by x.4 in the second column of an energy file)
-                if line_split[1] == "0":
+                if line_split[1] == "0.4":
                     pwr += float(line_split[-2][0:-2]) * float(line_split[-3][0:-2])
 
             # Writing in file_conso_per_nodes 
