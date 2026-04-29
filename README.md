@@ -1,56 +1,7 @@
 # AFF3CT energy consumption measure for polar codes decoders
 
-
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](http://gitlab-csn.ims-bordeaux.fr/fec/pac_decoder/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
 ## Name
-Energy consumption measure of polar decoding for AFF3CT librairy.
+Energy/power consumption measure of polar decoding for AFF3CT librairy.
 
 ## Description
 This project aims to measure the energy consumption of polar decoders from the AFF3CT library (you can see the documentation here: https://aff3ct.readthedocs.io/en/latest/), according to the allowed polar node simplifications. To measure the energy consumption on your own machine, the librairy CPP Joules is used. Further works will include measure on the Dalek cluster of LIP6 (Its presentation is avaible here: https://arxiv.org/abs/2508.10481). 
@@ -59,39 +10,63 @@ This project aims to measure the energy consumption of polar decoders from the A
 ## Installation
 
 # AFF3CT installation
-To run this project, you will first need to install the AFF3CT library. The installation guide is avaiable here: https://aff3ct.readthedocs.io/en/latest/user/installation/installation.html .
+To run this project, you will first need to install the AFF3CT library. The installation guide is avaiable here: https://aff3ct.readthedocs.io/en/latest/user/installation/installation.html.
 
 # CPP Joules installation
-The energy measurement is done thanks to the library CPP Joules. Thus, you need to install it to make the project work. Documentation can be found here: https://shiva9361.github.io/CPP_Joules/ .
+The energy measurement is done thanks to the library CPP Joules. Thus, you need to install it to make the project work. Documentation can be found here: https://shiva9361.github.io/CPP_Joules/. 
+
+# CPP Joules 
+CPP Joules works like the functions tik and tok for time measurement. It works only on Intel CPUs, as it uses RAPL.
+
+The first step is to create an energy tracker : EnergyTracker tracker;
+
+Then, you can measure the consummed energy of a code as follow : 
+  tracker.start()
+  ...
+  code
+  ...
+  tracker.stop()
+
+Finally, the function tracker.calculate_energy() computes the consummed energy. The results can be save in a csv file tracker.save_csv(filename_energy). 
 
 # Get the project and compile it
 
-
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+To compile the project, use make. Three executable are created :
+- TX_RX_energy_test : polar chain with emitter and receiver, and an energy consumption;
+- TX_gen_noisy_cw : generate a set of noisy codewords from the polar emitter, at a given SNR; 
+- RX_energy_test : decode the set of noisy codewords and return the consummed energy in a file (see CPP Joules documentation).
 
 ## Usage
-Multiple mains are present in this project. In this section, we 
-#
+You can modify the parameters of chains in the corresponding sh files : TX_RX_energy_test.sh and TX_gen_noisy_cw.sh.
+For the measured energy at the reception, RX_energy_test_polar_nodes is used to called RX_energy_test for different polar node configuration.
+Thus, an energy measure of the decoding process is realized for each polar node configuration. 
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## Use on Dalek
+Dalek is a cluster of the LIP6 laboratory (Sorbonne University in Paris) for energy measurements. 
+To use it, you need to create an account on the LIP6 servers.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The Dalek documentation is accessible from https://dalek.proj.lip6.fr/. It explains in particular the NCM module and also the different cluster machines.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+The branch dalek is similar to the main branch. The main files and sh files are changed to be used on the Dalek Cluster. 
+For instance, the energy measure is done with the NCM module instead of CPP Joules. 
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+To run a program, you need to install this git repo and the Dalek front.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Some uses cases are described bellow.
+
+A use case is also given with the file node_conso.sh. It measures the consumption of a Dalek node with no running program. 
+
+The file set_CPU_config allows to fix the CPU frequency from a yaml file and to test it on a Dalek node (see Hardware node setttings section on the Dalek documentation).
+
+You can also test the energy measurement with NCM of a polar chain with the file TX_RX_energy_test_Dalek.sh.
+
+To measure the consummed power or energy for the polar decoding, you need to :
+    - create a set of noisy codewords from the polar emitter, at a given SNR, thanks to file TX_gen_cw_noisy_Dalek.sh. The creation is specific to the Dalek node, so if you change the simulation node, you need to create again the set.
+    - run RX_energy_test_polar_nodes.py. A file from node conso is created for each tested polar node configuration of the decoder. It contains time, energy, intensity and voltage measurements for differents components of the node (such as CPU and GPU).
+    - run calcuate_energy.py and calcuate_power.py to compute the consummed energy and power for each decoding configuration from the node-conso files.
+
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+I would like to thanks the LIP6 team for their help and frequent debuggings with my simulations on the Dalek cluster. I would also like to thanks the AFF3CT team for helping me in this project. 
 
-## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-# AFF3CT_energy_consumption
